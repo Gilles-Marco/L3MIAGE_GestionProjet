@@ -1,5 +1,11 @@
 # L3MIAGE_GestionProjet
 
+# Projet Archerz
+
+## Equipe
+Gilles Marco
+Lefeuvre Maxence
+
 ## Première idée
 
 Jeu de plateforme et de tir à l'arc.
