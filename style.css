@@ -1,4 +1,18 @@
+*{
+  margin:0;
+  padding:0;
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+body, html {
+  height:100%;
+}
+
 #myCanvas{
+  overflow:hidden;
   border: solid 1px black;
   background: lightgrey;
+  height:100%;
+  width:100%;
 }
