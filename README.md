@@ -1,6 +1,6 @@
 # L3MIAGE_GestionProjet
 
-##Première idée
+## Première idée
 
 Jeu de plateforme et de tir à l'arc.
 La caméra scrollera sur le côté et le joueur devra se déplacer pour rester dans l'écran, s'il en sort il meurt.
