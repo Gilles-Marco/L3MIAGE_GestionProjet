@@ -1,4 +1,4 @@
-import {saveScore} from "./save.js";
+import {saveScore, getScoreList} from "./save.js";
 
 window.onload = init;
 
@@ -7,7 +7,6 @@ function init(){
   var canvas = document.querySelector("#myCanvas");
   
   //Start animation
-  saveScore("Marco", 20);
   requestAnimationFrame(updateCanvas);
 }
 
