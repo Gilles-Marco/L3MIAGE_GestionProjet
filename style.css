@@ -15,4 +15,67 @@ body, html {
   background: lightgrey;
   height:100%;
   width:100%;
+  z-index:0;
+}
+
+#startButton{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  z-index:1;
+  padding: 5px 40px;
+  font-size:24px;
+  cursor: pointer;
+}
+
+#saveScore{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  font-size: 24px;
+}
+
+#saveScore input[type="submit"]{
+  position:relative;
+  left:50%;
+  transform:translate(-50%, 0);
+  font-size:24px;
+  padding: 5px 40px;
+  margin-top:25px;
+}
+
+#saveScore label{
+  font-size:24px;
+  font-weight: bold;
+  padding-left:5px;
+}
+
+#saveScore input[type="text"]{
+  font-size:24px;
+}
+
+#scoreScreen{
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  z-index:1;
+}
+
+#scoreScreen button{
+  font-size:24px;
+  padding:5px 40px;
+  position: relative;
+  left:50%;
+  transform: translate(-50%, 0);
+}
+
+#scoreList{
+  margin-left:50%;
+  margin-bottom:30px;
+  transform: translate(-50%, 0);
+  font-size:24px;
 }
