@@ -2,6 +2,8 @@ import {saveScore, getScoreList} from "./save.js";
 
 window.onload = init;
 
+
+//GUI variable
 var canvas;
 
 var startButton;
@@ -10,7 +12,15 @@ var saveScoreDivButton;
 var scoreScreenDiv;
 var scoreScreenButton;
 
+//Game variable
 var score = 0;
+
+//Init game world variable
+var platformArray = [];
+var arrowArray = [];
+
+//Player variable
+var player;
 
 function init(){
   //Resize canvas to fullscreen
@@ -29,6 +39,7 @@ function init(){
   scoreScreenDiv.style.visibility = "hidden";
   scoreScreenButton = document.querySelector("#scoreScreen button");
   scoreScreenButton.onclick = newGame;
+
   //display the original frame
 
 }
