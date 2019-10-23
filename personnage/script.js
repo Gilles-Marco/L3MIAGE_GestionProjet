@@ -3,15 +3,15 @@ window.onload = init;
 let canvas;
 let sol = 0;
 let perso;
-
+let ctx;
 
 //Constructeur de p{ersonnage
 class Personnage{
-    constructor(x,y,width,height,color ){
+    constructor(x1,y1,width,height,color ){
         this.vie = 3;
 
-        this.x = x;
-        this.y = y; 
+        this.x = x1;
+        this.y = y1; 
         
         //variable de la tête
         this.teteX = this.x;
@@ -39,10 +39,13 @@ class Personnage{
         this.width=width;
         this.height=height;
         this.color=color;
+      
+        //Variable de variations
         this.dx = 1;
         this.dy = 1;
         console.log("Personnage créé");     
     }
+
 }
 
 function init(){
@@ -50,7 +53,6 @@ function init(){
     console.log("Page chargée");
     canvas = document.querySelector("#myCanvas");
     ctx = canvas.getContext("2d");
-    ctx_weapon= canvas.getContext("2d");
     sol = (canvas.height/6);
 
     //Creation du personnage
@@ -58,16 +60,16 @@ function init(){
 
     //On dessin le perso
     drawPersonnage(perso);
-    drawArc(perso);
+    //drawArc(perso);
 
     //On anime
-    //requestAnimationFrame(anime60fps);
+    requestAnimationFrame(anime60fps);
 
 }
 
 //Fonction animation
-/*function anime60fps() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function anime60fps() {
+    ctx.clearRect(0,0, canvas.width, canvas.height);
 
     //Deplacement personnage
     deplacePersonnage(perso);
@@ -76,7 +78,7 @@ function init(){
     //TODO Deplacement ennemi
 
     requestAnimationFrame(anime60fps);
-}*/
+}
 
 function drawPersonnage(perso){
     ctx.strokeStyle = perso.color;
@@ -84,6 +86,7 @@ function drawPersonnage(perso){
 
     //Draw la tete
     let tete = ctx.arc(perso.teteX,perso.teteY,10,0,2* Math.PI);
+
     
     //Draw corps
     let corps = ctx.moveTo(perso.corpsX, perso.corpsY);
@@ -110,7 +113,7 @@ function drawPersonnage(perso){
 
 
 
-function drawArc(perso){
+/*function drawArc(perso){
   ctx.strokeStyle = perso.color;
   ctx.beginPath();
   
@@ -118,27 +121,20 @@ function drawArc(perso){
   let corde;
   
   
-  ctx.stroke();
+  ctx.stroke();y
   
   ctx.closePath();
-}
+}*/
 
-/*function deplacePersonnage(perso){
-    perso.x+=perso.dx;
-    perso.y+=perso.dy;
-    
-    if(perso.x + perso.width >= canvas.width/2.5) {
-        perso.dx = -.5;
-    }
-    if(perso.x <= 0){
-        perso.dx =.5;
-    }
-    
-    if(perso.y + perso.height >= canvas.height) {
-      perso.dy = -1;
-    } 
-    
-    if(perso.y <= 35) {
-      perso.dy =1;
-    }
-  }*/
+  
+
+function deplacePersonnage(perso){
+  perso.x = perso.x + perso.dx;
+  perso.y = perso.y + perso.dy;
+
+  
+  console.log("Le perso avance en" + perso.x +" et " +perso.y);
+  
+
+	
+}
