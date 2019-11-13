@@ -36,26 +36,15 @@ export class PlatformGenerator{
         
         //créer une plateforme
         //Génération d'un Y aléatoire
-        let isIntersected = false;
-        let platform;
-        do{
+        //Check  si la plateforme ne se collide pas
+        let platform = new Platform(this.cursor, Math.random()*this.canvas.clientHeight, this.platformWidth, this.platformHeight, this.ctx);
+        let nbPlat = Math.ceil(this.platformWidth/this.platformDensity);
+        let min = (this.arrayPlatform.length-nbPlat>0) ? this.arrayPlatform.length-nbPlat : 0;
+        let buffArray = this.arrayPlatform.slice(min, this.arrayPlatform.length);
+        while(this.intersectMultiple(platform, buffArray))
             platform = new Platform(this.cursor, Math.random()*this.canvas.clientHeight, this.platformWidth, this.platformHeight, this.ctx);
-            console.log("Generating platform")
 
-            if(this.arrayPlatform.length>0){
-                //Calculate how many platform created before it, it needs to check
-                let nbPlat = Math.ceil(this.platformWidth/this.platformDensity);
-                //Check si la nouvelle platform n'intersect pas avec une 
-                //plateforme de arrayPlatform[max] à arrayPlatform[max-nbPlat]
-                for(let i=this.arrayPlatform.length-1;i>(this.arrayPlatform.length-nbPlat>0) ? this.arrayPlatform.length-nbPlat : 0;i--){
-                    if(this.intersect(platform, this.arrayPlatform[i])){
-                        isIntersected = true;
-                        break;
-                    }
-                }
-            }
-        } while(isIntersected);
-        console.log("Platform validated");
+        //Ajout de la plateforme
         this.arrayPlatform.push(platform);
         this.lastPlacedPlatform = platform;
     }
@@ -87,6 +76,17 @@ export class PlatformGenerator{
             return true;
         else
             return false;
+    }
+
+    intersectMultiple(p1, arrayP){
+        let intersectRect = false;
+        for(let i=0;i<arrayP.length;i++){
+            if(this.intersect(p1, arrayP[i])){
+                intersectRect = true;
+                break;
+            }
+        }
+        return intersectRect;
     }
 
     clean(){
