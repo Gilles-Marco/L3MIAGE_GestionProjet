@@ -1,8 +1,16 @@
 import {saveScore, getScoreList} from "./save.js";
 import { PlatformGenerator } from "./platform/plateformGenerator.js";
+import { Platform } from "./platform/plateforme.js";
+import { Ennemy } from "./ennemy/ennemy.js";
+import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 
 window.onload = init;
 
+//DEBUG Variable
+const DEBUG = true;
+
+//Game physics
+const gravite = 9.8;
 
 //GUI variable
 var canvas;
@@ -21,6 +29,7 @@ var t1 = null;
 //Init game world variable
 var platformArray = [];
 var arrowArray = [];
+var ennemyArray = [];
 
 //Player variable
 var player;
@@ -30,6 +39,9 @@ const platformWidth = 120;
 const platformHeight = 30;
 var platformGenerator;
 
+//Ennemy variable
+var ennemyGenerator;
+
 function init(){
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
@@ -37,8 +49,10 @@ function init(){
   canvas.width = window.outerWidth;
   ctx = canvas.getContext("2d");
 
-  //Bind button to action
+  //Bind GUI button to action
   startButton = document.querySelector("#startButton");
+  if(DEBUG)
+    startButton.style.visibility = "hidden";
   startButton.onclick = startGame;
   
   saveScoreDiv = document.querySelector("#saveScore");
@@ -53,6 +67,8 @@ function init(){
 
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
+  //Générateur d'ennemis
+  ennemyGenerator = new EnnemyGenerator(150, ennemyArray, 0, 10);
   updateCanvas();
 }
 
