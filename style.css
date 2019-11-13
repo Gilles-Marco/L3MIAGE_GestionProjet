@@ -13,8 +13,6 @@ body, html {
   overflow:hidden;
   border: solid 1px black;
   background: lightgrey;
-  height:100%;
-  width:100%;
   z-index:0;
 }
 
