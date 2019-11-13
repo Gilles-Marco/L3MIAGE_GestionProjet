@@ -33,6 +33,8 @@ var platformGenerator;
 function init(){
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
+  canvas.height = window.outerHeight;
+  canvas.width = window.outerWidth;
   ctx = canvas.getContext("2d");
 
   //Bind button to action
@@ -75,8 +77,6 @@ function updateCanvas(timestamp){
 
   //Generation des plateformes
   platformGenerator.generate();
-  console.log(platformArray);
-  console.log(`${platformGenerator.cursor} ${platformGenerator.cursorjump}`);
   //Draw Platform
   platformArray.forEach((item, index)=>{
     item.draw();
