@@ -1,19 +1,17 @@
 export class Platform{
 
-    constructor(x, y, width, height, canvas){
+    constructor(x, y, width, height, ctx){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = ctx
     }
 
     draw(){
         this.ctx.save();
-        
         this.ctx.fillStyle = "black";
-        this.ctx.fillRect(x, y, height, canvas);
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
         this.ctx.restore();
     }
 

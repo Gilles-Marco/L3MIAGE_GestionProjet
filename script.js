@@ -6,6 +6,7 @@ window.onload = init;
 
 //GUI variable
 var canvas;
+var ctx;
 
 var startButton;
 var saveScoreDiv;
@@ -32,6 +33,7 @@ var platformGenerator;
 function init(){
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
+  ctx = canvas.getContext("2d");
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -48,13 +50,13 @@ function init(){
   scoreScreenButton.onclick = newGame;
 
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(240, platformWidth, platformHeight, 25, canvas);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
+  updateCanvas();
 }
 
 function updateCanvas(timestamp){
   //Main function loop
   //Redraw the background
-  let ctx = canvas.getContext("2d");
   ctx.save();
   ctx.fillStyle="lightgrey";
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
@@ -69,15 +71,17 @@ function updateCanvas(timestamp){
     delta = timestamp-t1;
     t1 = timestamp;
   }
-  drawFps(delta, canvas);
+  drawFps(delta);
 
   //Generation des plateformes
-  let platform = platformGenerator.generate();
-  if(platform!=null){
-    platformArray.push(platform);
-    platformGenerator.cursor++;
-  }
-  
+  platformGenerator.generate();
+  console.log(platformArray);
+  console.log(`${platformGenerator.cursor} ${platformGenerator.cursorjump}`);
+  //Draw Platform
+  platformArray.forEach((item, index)=>{
+    item.draw();
+  });
+
   requestAnimationFrame(updateCanvas);
 }
 
@@ -123,9 +127,9 @@ function newGame(){
   startButton.style.visibility = "visible";
 }
 
-function drawFps(delta, canvas){
+function drawFps(delta){
   let fps = 1000/delta;
-  let ctx = canvas.getContext("2d");
+  fps = Math.round(fps);
   ctx.save();
   ctx.font = "12px Arial";
   ctx.fillStyle = "red";
