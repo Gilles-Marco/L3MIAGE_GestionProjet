@@ -1,4 +1,5 @@
 import {saveScore, getScoreList} from "./save.js";
+import {Personnage} from "./personnage.js";
 
 window.onload = init;
 
@@ -10,14 +11,31 @@ var saveScoreDivButton;
 var scoreScreenDiv;
 var scoreScreenButton;
 
+let sol = 0;
+let perso;
+let ctx;
+
+
+var t1 = 1;
+
 var score = 0;
 
 function init(){
+  console.log("Page chargée");
+
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
 
+  ctx = canvas.getContext("2d");
+  sol = (canvas.clientHeight/20);
+
+  //Creation du personnage
+  perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
+
+
   //Bind button to action
   startButton = document.querySelector("#startButton");
+  startButton.style.visibility = "hidden";
   startButton.onclick = startGame;
   
   saveScoreDiv = document.querySelector("#saveScore");
@@ -31,10 +49,30 @@ function init(){
   scoreScreenButton.onclick = newGame;
   //display the original frame
 
+
+  //Listener pour le déplacement
+  window.addEventListener('keydown',function(event){
+    if(event.keyCode === 39 && perso.x < (canvas.clientWidth-20)){
+       perso.deplacePersonnage(1,0); 
+       this.console.log("Le perso avance à droite");
+    }
+    if(event.keyCode === 37 && perso.x > 13){
+      perso.deplacePersonnage(-1,0);
+      this.console.log("Le perso avance à gauche");
+    }
+  });
+
+  updateCanvas();
+
 }
 
-function updateCanvas(){
+function updateCanvas(timestamp){
+    // 1 - Clear
+  ctx.clearRect(0,0, canvas.width, canvas.height);
   
+   // 2 - Draw
+  perso.drawPersonnage();
+
   requestAnimationFrame(updateCanvas);
 }
 
