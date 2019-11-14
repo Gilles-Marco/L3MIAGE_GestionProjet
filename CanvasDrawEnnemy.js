@@ -35,9 +35,13 @@ function init(){
   ctx.stroke();
   //Shield
   ctx.beginPath();
-  ctx.moveTo(x+x/2-15, y+y/4+20);
-  ctx.lineTo(x+x/2+15, y+y/4+25);
-  ctx.stroke();
+  ctx.moveTo(x+x/2-15, y+y/4+15);
+  ctx.lineTo(x+x/2-15, y+y/4+35);
+  ctx.lineTo(x+x/2-20, y+y/4+40);
+  ctx.lineTo(x+x/2-25, y+y/4+35);
+  ctx.lineTo(x+x/2-25, y+y/4+15);
+  ctx.lineTo(x+x/2-15, y+y/4+15);
+  ctx.fill();
   //Sword
   ctx.restore();
 }
