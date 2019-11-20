@@ -55,8 +55,8 @@ function init(){
 
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
-  canvas.height = window.outerHeight;
-  canvas.width = window.outerWidth;
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
 
   ctx = canvas.getContext("2d");
   sol = (canvas.clientHeight/20);
