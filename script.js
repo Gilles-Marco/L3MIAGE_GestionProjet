@@ -5,6 +5,8 @@ import { Ennemy } from "./ennemy/ennemy.js";
 import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 import {Personnage} from "./personnage.js";
 import {Arc} from "./arc.js";
+import {Arrow} from "./arrow/arrow.js";
+
 
 
 window.onload = init;
@@ -45,6 +47,7 @@ const platformWidth = 120;
 const platformHeight = 30;
 var platformGenerator;
 
+
 //Ennemy variable
 var ennemyGenerator;
 
@@ -66,6 +69,7 @@ function init(){
   //Creation du personnage
   perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
   arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
+
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -102,6 +106,10 @@ function init(){
       
       console.log(perso.dy);
     }
+
+    if(event.keyCode === 32){
+      arc.puissance +=0.1;
+    }
   });
 
 
@@ -119,16 +127,29 @@ function init(){
       this.console.log("Le perso avance à gauche");
     }
 
-
+    if(event.keyCode === 32 ){
+      arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance));
+      this.console.log("Espace a été relaché, puissance : " + arc.puissance);
+      arc.puissance =4;
+      arrowArray.c
+      
+    }
   });
+  
+
+
 
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
   //Générateur d'ennemis
   ennemyGenerator = new EnnemyGenerator(250, ennemyArray, 0, 10, ctx);
+
+ 
+
   updateCanvas();
 
 }
+
 
 function updateCanvas(timestamp){
   //Main function loop
@@ -137,7 +158,9 @@ function updateCanvas(timestamp){
   ctx.fillStyle="lightgrey";
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx.restore();
-  
+
+
+
   //Get time delta
   if(timestamp!=undefined){
     delta = timestamp-t1;
@@ -151,6 +174,7 @@ function updateCanvas(timestamp){
   platformGenerator.generate();
   //Generation des ennemys
   ennemyGenerator.generate();
+
   //Draw Platform
   platformArray.forEach((item, index)=>{
     item.draw();
@@ -163,6 +187,12 @@ function updateCanvas(timestamp){
     item.draw();
   });
 
+  arrowArray.forEach((item,index)=>{
+    item.drawArrow();
+    item.deplacerArrow();
+  });
+
+
   // 2 - Test des collision du joueur
   playerCollision();
   
@@ -170,11 +200,14 @@ function updateCanvas(timestamp){
   // 3 - Deplacement personnage
   perso.deplacePersonnage();
   arc.deplacerArc(perso.dx,perso.dy);
+
  
   
    // 4 - Draw
   perso.drawPersonnage();
   arc.drawArc();
+
+
   
   // 5 - Animation
   requestAnimationFrame(updateCanvas);
@@ -187,7 +220,7 @@ function playerCollision(){
     arc.y = perso.brasY;
     perso.dy = 0;
   }
- if(perso.x >= (canvas.width -20)&& perso.dx>0){
+ if(perso.x >= (canvas.width -30)&& perso.dx>0){
     perso.dx = 0;
   
   }
