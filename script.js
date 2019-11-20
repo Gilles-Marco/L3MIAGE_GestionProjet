@@ -115,9 +115,9 @@ function init(){
   });
 
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 450, 5, platformArray, canvas, ctx);
   //Générateur d'ennemis
-  ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, 0, 10, ctx);
+  ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, ctx);
   updateCanvas();
 
 }
@@ -139,20 +139,49 @@ function updateCanvas(timestamp){
   // Affichage FPS
   drawFps(delta);
   
+  //Nettoyage des plateformes inutiles dans platformArray TODO
+  //Nettoyage des ennemis inuiles dans ennemyArray TODO
+  //Nettoyage des flèches inutiles dans arrowArray TODO
+
   //Generation des plateformes
   platformGenerator.generate();
   //Generation des ennemys
-  ennemyGenerator.generate();
+  if(platformGenerator.cursor>=canvas.width*0.80)
+    ennemyGenerator.generate();
   //Draw Platform
   platformArray.forEach((item, index)=>{
     item.draw();
+    if(DEBUG){
+      ctx.save();
+      ctx.fillStyle = "red";
+      ctx.fillText(index, item.x+item.width/2, item.y+item.height/2);
+      ctx.restore();
+    }
   });
   //Draw des ennemys
   ennemyArray.forEach((item, index)=>{
-    //Collision TODO
-    //Gravite TODO
+    //Gravite
+    item.vy += gravite*(delta/1000);
+    //Collision
+    let platformCollide = ennemyCollision(item, platformArray);
+    if(platformCollide!=null){ //Collision avec une plateforme
+      item.vy = 0;
+      item.y = platformCollide.y-item.height;
+    }
+    else if(item.y >= canvas.height-sol-item.height){ //Collision avec le sol
+      item.vy = 0;
+      item.y = canvas.height-sol-item.height;
+    }
+    else;
+
     item.update();
     item.draw();
+    if(DEBUG){
+      ctx.save();
+      ctx.fillStyle = "red";
+      ctx.fillText(index, item.x+item.width/3, item.y+item.height/2);
+      ctx.restore();
+    }
   });
 
   // 2 - Test des collision du joueur
@@ -175,10 +204,36 @@ function playerCollision(){
     perso.y = canvas.height - sol;
     perso.dy = 0;
   }
- if(perso.x >= (canvas.width -20)&& perso.dx>0){
+  if(perso.x >= (canvas.width -20)&& perso.dx>0){
     perso.dx = 0;
-  
   }
+}
+
+function ennemyCollision(ennemy, arrayPlateform){
+  //Feet ennemy
+  let feetX1 = ennemy.x+ennemy.width/3;
+  let feetX2 = ennemy.x+ennemy.width/1.75;
+  let feetY = ennemy.y+ennemy.height;
+
+  let feetRadius = (feetX2-feetX1)/2;
+  let feetMiddle = feetX1+feetRadius;
+
+  for(let i=0;i<arrayPlateform.length;i++){
+    //Check le X si la plateforme est "interessante"
+    let platformRadius = arrayPlateform[i].width/2;
+    let platformMiddle = arrayPlateform[i].x+platformRadius;
+
+    let distanceBetween = Math.abs(feetMiddle-platformMiddle);
+    let totalRadius = feetRadius+platformRadius;
+    if(distanceBetween<=totalRadius && feetY<=arrayPlateform[i].y+arrayPlateform[i].height){
+      //Check si la hauteur est bonne
+      if(arrayPlateform[i].y<=feetY && arrayPlateform[i].y+arrayPlateform[i].height >= feetY){
+        return arrayPlateform[i];
+      }
+    }
+  }
+
+  return null;
 }
 
 
