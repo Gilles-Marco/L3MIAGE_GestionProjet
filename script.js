@@ -25,6 +25,7 @@ var scoreScreenButton;
 
 //Game variable
 var score = 0;
+var delta = 1;
 var t1 = null;
 
 //Init game world variable
@@ -45,10 +46,8 @@ var platformGenerator;
 
 //Ennemy variable
 var ennemyGenerator;
-
-var t1 = 1;
-var delta = 1;
-var score = 0;
+const ennemyWidth = 30;
+const ennemyHeight = 50;
 
 function init(){
   console.log("Page chargée");
@@ -118,7 +117,7 @@ function init(){
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
   //Générateur d'ennemis
-  ennemyGenerator = new EnnemyGenerator(250, ennemyArray, 0, 10, ctx);
+  ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, 0, 10, ctx);
   updateCanvas();
 
 }
