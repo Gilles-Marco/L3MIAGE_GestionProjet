@@ -211,29 +211,19 @@ function updateCanvas(timestamp){
     }
   });
 
-  arrowArray.forEach((item,index)=>{
-    item.drawArrow();
-    item.deplacerArrow();
-  });
-
-
-  // 2 - Test des collision du joueur
   playerCollision();
-  
-
-  // 3 - Deplacement personnage
   perso.deplacePersonnage();
-  arc.deplacerArc(perso.dx,perso.dy);
-
- 
-  
-   // 4 - Draw
   perso.drawPersonnage();
-  arc.drawArc();
 
-
+  //Draw du sol
+  ctx.save();
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height-sol);
+  ctx.lineTo(canvas.width, canvas.height-sol);
+  ctx.stroke();
+  ctx.restore();
   
-  // 5 - Animation
   requestAnimationFrame(updateCanvas);
 }
 
