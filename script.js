@@ -48,7 +48,6 @@ var ennemyGenerator;
 
 var t1 = 1;
 var delta = 1;
-var gravite = 9.8;
 var score = 0;
 
 function init(){
