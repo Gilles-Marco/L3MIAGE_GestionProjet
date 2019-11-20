@@ -118,7 +118,7 @@ function init(){
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
   //Générateur d'ennemis
-  ennemyGenerator = new EnnemyGenerator(150, ennemyArray, 0, 10);
+  ennemyGenerator = new EnnemyGenerator(250, ennemyArray, 0, 10, ctx);
   updateCanvas();
 
 }
@@ -142,8 +142,17 @@ function updateCanvas(timestamp){
   
   //Generation des plateformes
   platformGenerator.generate();
+  //Generation des ennemys
+  ennemyGenerator.generate();
   //Draw Platform
   platformArray.forEach((item, index)=>{
+    item.draw();
+  });
+  //Draw des ennemys
+  ennemyArray.forEach((item, index)=>{
+    //Collision TODO
+    //Gravite TODO
+    item.update();
     item.draw();
   });
 
