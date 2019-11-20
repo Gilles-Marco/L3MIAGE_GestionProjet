@@ -4,6 +4,8 @@ import { Platform } from "./platform/plateforme.js";
 import { Ennemy } from "./ennemy/ennemy.js";
 import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 import {Personnage} from "./personnage.js";
+import {Arc} from "./arc.js";
+
 
 window.onload = init;
 
@@ -33,9 +35,9 @@ var arrowArray = [];
 var ennemyArray = [];
 
 //Player variable
-var player;
 var sol = 0;
 var perso;
+var  arc;
 var ctx;
 
 //Constante sur la taille des plateformes
@@ -55,15 +57,15 @@ function init(){
 
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
-  canvas.height = window.outerHeight;
-  canvas.width = window.outerWidth;
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
 
   ctx = canvas.getContext("2d");
   sol = (canvas.clientHeight/20);
 
   //Creation du personnage
   perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
-
+  arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -86,15 +88,18 @@ function init(){
   //Listener pour le déplacement
   window.addEventListener('keydown',function(event){
     if(event.keyCode === 39 ){
-      perso.dx += 1  
+      perso.dx += 1  ;
+
       this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37 ){
       perso.dx -= 1 ;
+
       this.console.log("Le perso avance à gauche");
     }
     if(event.keyCode === 38 && perso.dy>=0){
       perso.dy -= 10;
+      
       console.log(perso.dy);
     }
   });
@@ -103,11 +108,13 @@ function init(){
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
       perso.dx = 0;
+ 
 
        this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37){
       perso.dx = 0; 
+
 
       this.console.log("Le perso avance à gauche");
     }
@@ -158,13 +165,16 @@ function updateCanvas(timestamp){
 
   // 2 - Test des collision du joueur
   playerCollision();
+  
 
   // 3 - Deplacement personnage
   perso.deplacePersonnage();
+  arc.deplacerArc(perso.dx,perso.dy);
  
   
    // 4 - Draw
   perso.drawPersonnage();
+  arc.drawArc();
   
   // 5 - Animation
   requestAnimationFrame(updateCanvas);
@@ -174,6 +184,7 @@ function playerCollision(){
   perso.dy += gravite*delta/1000;
   if(perso.y > (canvas.height - sol) && perso.dy>0){
     perso.y = canvas.height - sol;
+    arc.y = perso.brasY;
     perso.dy = 0;
   }
  if(perso.x >= (canvas.width -20)&& perso.dx>0){
@@ -181,6 +192,7 @@ function playerCollision(){
   
   }
 }
+
 
 
 function startGame(){

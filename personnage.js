@@ -19,7 +19,7 @@ export class Personnage{
         //Variable du bras
         this.brasX = this.x;
         this.brasY = this.y-10;
-        this.angleBX = 45;
+        this.angleBX = 50;
         this.angleBY = this.y-10;
       
         //Variable jambe
