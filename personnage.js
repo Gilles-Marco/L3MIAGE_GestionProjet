@@ -58,13 +58,16 @@ export class Personnage{
         this.jambeX = this.x;
         this.jambeY = this.y;
         this.angleJY = this.y+20;
-
+        this.ctx.save();
         this.ctx.strokeStyle = this.color;
+        this.ctx.fillStyle = "blue";
         this.ctx.beginPath();
 
         //Draw la tete
         this.ctx.arc(this.teteX,this.teteY,10,0,2* Math.PI);
+        this.ctx.fill();
 
+        this.ctx.beginPath();
         //Draw corps
         this.ctx.moveTo(this.corpsX, this.corpsY);
         this.ctx.lineTo(this.angleCX, this.angleCY);
@@ -82,6 +85,7 @@ export class Personnage{
     
         this.ctx.stroke();
         this.ctx.closePath();
+        this.ctx.restore();
     }
   
   deplacePersonnage(){
