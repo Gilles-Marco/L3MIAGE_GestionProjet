@@ -184,17 +184,19 @@ function updateCanvas(timestamp){
     }
   });
 
-  // 2 - Test des collision du joueur
   playerCollision();
-
-  // 3 - Deplacement personnage
   perso.deplacePersonnage();
- 
-  
-   // 4 - Draw
   perso.drawPersonnage();
+
+  //Draw du sol
+  ctx.save();
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height-sol);
+  ctx.lineTo(canvas.width, canvas.height-sol);
+  ctx.stroke();
+  ctx.restore();
   
-  // 5 - Animation
   requestAnimationFrame(updateCanvas);
 }
 
