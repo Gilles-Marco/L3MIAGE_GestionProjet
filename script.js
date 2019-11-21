@@ -156,7 +156,6 @@ function updateCanvas(timestamp){
   // Affichage FPS
   drawFps(delta);
 
-  cameraSpeed += 0.15;
   moveCamera(delta);
   
   //Nettoyage des plateformes inutiles dans platformArray TODO
@@ -299,6 +298,7 @@ function moveCamera(delta){
   ennemyArray.forEach((item)=>{
     item.x -= cameraSpeed*(delta/1000);
   });
+  cameraSpeed += 0.10;
 }
 
 
