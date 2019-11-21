@@ -38,6 +38,8 @@ var player;
 var sol = 0;
 var perso;
 var ctx;
+var deplacementDroite = false;
+var deplacementGauche = false;
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
@@ -63,7 +65,6 @@ function init(){
   //Creation du personnage
   perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
 
-
   //Bind button to action
   startButton = document.querySelector("#startButton");
   if(DEBUG)
@@ -79,43 +80,36 @@ function init(){
   scoreScreenDiv.style.visibility = "hidden";
   scoreScreenButton = document.querySelector("#scoreScreen button");
   scoreScreenButton.onclick = newGame;
-  //display the original frame
-
 
   //Listener pour le déplacement
   window.addEventListener('keydown',function(event){
     if(event.keyCode === 39 ){
-      perso.dx += 1  
+      deplacementDroite = true;
       this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37 ){
-      perso.dx -= 1 ;
+      deplacementGauche = true;
       this.console.log("Le perso avance à gauche");
     }
     if(event.keyCode === 38 && perso.dy>=0){
-      perso.dy -= 10;
+      perso.dy -= 500;
       console.log(perso.dy);
     }
   });
 
-
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
-      perso.dx = 0;
-
-       this.console.log("Le perso avance à droite");
+      deplacementDroite = false;
+      this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37){
-      perso.dx = 0; 
-
+      deplacementGauche = false;
       this.console.log("Le perso avance à gauche");
     }
-
-
   });
 
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 450, 5, platformArray, canvas, ctx);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 20, platformArray, canvas, ctx);
   //Générateur d'ennemis
   ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, ctx);
   updateCanvas();
@@ -184,8 +178,10 @@ function updateCanvas(timestamp){
     }
   });
 
+  playerDeplacement();
   playerCollision();
-  perso.deplacePersonnage();
+  playerPlatform(platformArray);
+  perso.deplacePersonnage(delta);
   perso.drawPersonnage();
 
   //Draw du sol
@@ -200,8 +196,17 @@ function updateCanvas(timestamp){
   requestAnimationFrame(updateCanvas);
 }
 
+function playerDeplacement(){
+  if(deplacementDroite)
+    perso.dx += 50;
+  else if(deplacementGauche)
+    perso.dx -= 50;
+  else
+    perso.dx = 0;
+}
+
 function playerCollision(){
-  perso.dy += gravite*delta/1000;
+  perso.dy += gravite;
   if(perso.y > (canvas.height - sol) && perso.dy>0){
     perso.y = canvas.height - sol;
     perso.dy = 0;
@@ -209,6 +214,29 @@ function playerCollision(){
   if(perso.x >= (canvas.width -20)&& perso.dx>0){
     perso.dx = 0;
   }
+}
+
+function playerPlatform(platformArray){
+  //Taille du perso = y+20
+  let persoFeet = perso.y+20;
+  let persoMiddle = perso.x;
+  let persoRadius = 30/2;
+
+  for(let i=0;i<platformArray.length;i++){
+    let platformRadius = platformArray[i].width/2;
+    let platformMiddle = platformArray[i].x+platformRadius;
+    
+    let distanceBetween = Math.abs(persoMiddle-platformMiddle);
+    let totalRadius = persoRadius+platformRadius;
+    if(totalRadius>=distanceBetween && perso.dy>0){ //Platform interessante
+      if(persoFeet>platformArray[i].y && persoFeet<platformArray[i].y+platformArray[i].height){
+        perso.dy = 0;
+        perso.y = platformArray[i].y-20;
+        return platformArray[i];
+      }
+    }
+  }
+  return null;
 }
 
 function ennemyCollision(ennemy, arrayPlateform){
