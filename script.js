@@ -27,7 +27,8 @@ var scoreScreenButton;
 var score = 0;
 var delta = 1;
 var t1 = null;
-var cameraSpeed = 1;
+var cameraSpeed = 50;
+var cameraIncrement = 20;
 
 //Init game world variable
 var platformArray = [];
@@ -37,8 +38,9 @@ var ennemyArray = [];
 //Player variable
 var sol = 0;
 var perso;
-var persoWidth = 30;
-var persoHeight = 50;
+const persoWidth = 30;
+const persoHeight = 50;
+const persoDXMAX = 400;
 var deplacementDroite = false;
 var deplacementGauche = false;
 
@@ -64,7 +66,7 @@ function init(){
   sol = canvas.height-canvas.clientHeight/20;
 
   //Creation du personnage
-  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, "blue", ctx);
+  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -104,6 +106,8 @@ function init(){
     }
   });
 
+  //Timer pour faire accélérer la caméra
+
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
@@ -129,7 +133,8 @@ function updateCanvas(timestamp){
   // Affichage FPS
   drawFps(delta);
 
-  moveCamera();
+  cameraSpeed += 0.15;
+  moveCamera(delta);
   
   //Nettoyage des plateformes inutiles dans platformArray TODO
   //Nettoyage des ennemis inuiles dans ennemyArray TODO
@@ -195,10 +200,12 @@ function updateCanvas(timestamp){
 }
 
 function playerDeplacement(){
+  //Pour éviter que le personnage se fasse ejecter par la vitesse de la caméra à "haut niveau"
+  perso.DXMAX = persoDXMAX+cameraSpeed;
   if(deplacementDroite)
-    perso.dx += 50;
+    perso.dx += 50+cameraSpeed;
   else if(deplacementGauche)
-    perso.dx -= 50;
+    perso.dx -= 50+cameraSpeed;
   else
     perso.dx = 0;
 }
@@ -261,13 +268,13 @@ function ennemyCollision(ennemy, arrayPlateform){
   return null;
 }
 
-function moveCamera(){
-  perso.x -= cameraSpeed;
+function moveCamera(delta){
+  perso.x -= cameraSpeed*(delta/1000);
   platformArray.forEach((item)=>{
-    item.x -= cameraSpeed;
+    item.x -= cameraSpeed*(delta/1000);
   });
   ennemyArray.forEach((item)=>{
-    item.x -= cameraSpeed;
+    item.x -= cameraSpeed*(delta/1000);
   });
 }
 
