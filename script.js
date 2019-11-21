@@ -27,6 +27,7 @@ var scoreScreenButton;
 var score = 0;
 var delta = 1;
 var t1 = null;
+var cameraSpeed = 1;
 
 //Init game world variable
 var platformArray = [];
@@ -34,7 +35,6 @@ var arrowArray = [];
 var ennemyArray = [];
 
 //Player variable
-var player;
 var sol = 0;
 var perso;
 var ctx;
@@ -193,6 +193,8 @@ function updateCanvas(timestamp){
   ctx.stroke();
   ctx.restore();
   
+  moveCamera();
+
   requestAnimationFrame(updateCanvas);
 }
 
@@ -264,6 +266,16 @@ function ennemyCollision(ennemy, arrayPlateform){
   }
 
   return null;
+}
+
+function moveCamera(){
+  perso.x -= cameraSpeed;
+  platformArray.forEach((item)=>{
+    item.x -= cameraSpeed;
+  });
+  ennemyArray.forEach((item)=>{
+    item.x -= cameraSpeed;
+  });
 }
 
 
