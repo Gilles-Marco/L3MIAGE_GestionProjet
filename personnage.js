@@ -1,12 +1,12 @@
 //Constructeur de personnage
 export class Personnage{
-    constructor(x1,y1,width,height,color,ctx){
+    constructor(x1,y1,width,height, DXMAX, color,ctx){
         this.vie = 3;
         this.x = x1;
         this.y = y1; 
         this.ctx = ctx;
 
-        this.DXMAX = 400;
+        this.DXMAX = DXMAX;
       
         this.width=width;
         this.height=height;
