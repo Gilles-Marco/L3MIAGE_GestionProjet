@@ -2,7 +2,7 @@ import { Ennemy } from "./ennemy.js";
 
 export class EnnemyGenerator {
 
-    constructor(ennemyDensity, ennemyWidth, ennemyHeight, ennemyArray, cursor, cursorjump, ctx){
+    constructor(ennemyDensity, ennemyWidth, ennemyHeight, ennemyArray, cursor, cursorjump, canvas, ctx){
         this.ennemyDensity = ennemyDensity;
         this.ennemyArray = ennemyArray;
         this.ennemyWidth = ennemyWidth;
@@ -10,11 +10,13 @@ export class EnnemyGenerator {
         this.lastPlacedEnnemy = null;
         this.cursor = cursor;
         this.cursorjump = cursorjump;
+        this.canvas = canvas;
         this.ctx = ctx;
     }
 
     generate(){
-        this.cursor += this.cursorjump;
+        if(this.cursor<this.canvas.clientWidth-100)
+            this.cursor += this.cursorjump;
 
         //Check si le générateur peut créer un nouvel Ennemy en fonction de la densité sur laquelle il a été créer
         if(this.lastPlacedEnnemy!=null){

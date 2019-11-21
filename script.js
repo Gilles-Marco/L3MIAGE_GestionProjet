@@ -105,9 +105,9 @@ function init(){
   });
 
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 20, platformArray, canvas, ctx);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
-  ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, ctx);
+  ennemyGenerator = new EnnemyGenerator(150, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, canvas, ctx);
   updateCanvas();
 
 }
@@ -128,6 +128,8 @@ function updateCanvas(timestamp){
 
   // Affichage FPS
   drawFps(delta);
+
+  moveCamera();
   
   //Nettoyage des plateformes inutiles dans platformArray TODO
   //Nettoyage des ennemis inuiles dans ennemyArray TODO
@@ -188,8 +190,6 @@ function updateCanvas(timestamp){
   ctx.lineTo(canvas.width, sol);
   ctx.stroke();
   ctx.restore();
-  
-  //moveCamera();
 
   requestAnimationFrame(updateCanvas);
 }
