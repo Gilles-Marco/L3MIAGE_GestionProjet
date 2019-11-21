@@ -41,8 +41,9 @@ var ennemyArray = [];
 //Player variable
 var sol = 0;
 var perso;
+var persoWidth = 30;
+var persoHeight = 50;
 var  arc;
-var ctx;
 var deplacementDroite = false;
 var deplacementGauche = false;
 
@@ -66,10 +67,10 @@ function init(){
   canvas.width = window.innerWidth;
 
   ctx = canvas.getContext("2d");
-  sol = (canvas.clientHeight/20);
+  sol = canvas.height-canvas.clientHeight/20;
 
   //Creation du personnage
-  perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
+  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, "blue", ctx);
   arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
 
   //Bind button to action
@@ -92,15 +93,12 @@ function init(){
   window.addEventListener('keydown',function(event){
     if(event.keyCode === 39 ){
       deplacementDroite = true;
-      this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37 ){
       deplacementGauche = true;
-      this.console.log("Le perso avance à gauche");
     }
     if(event.keyCode === 38 && perso.dy>=0){
       perso.dy -= 500;
-      console.log(perso.dy);
     }
 
     if(event.keyCode === 32){
@@ -111,11 +109,9 @@ function init(){
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
       deplacementDroite = false;
-      this.console.log("Le perso avance à droite");
     }
     if(event.keyCode === 37){
       deplacementGauche = false;
-      this.console.log("Le perso avance à gauche");
     }
 
     if(event.keyCode === 32 ){
@@ -185,9 +181,9 @@ function updateCanvas(timestamp){
       item.vy = 0;
       item.y = platformCollide.y-item.height;
     }
-    else if(item.y >= canvas.height-sol-item.height){ //Collision avec le sol
+    else if(item.y >= sol-item.height){ //Collision avec le sol
       item.vy = 0;
-      item.y = canvas.height-sol-item.height;
+      item.y = sol-item.height;
     }
     else;
 
@@ -211,12 +207,12 @@ function updateCanvas(timestamp){
   ctx.save();
   ctx.strokeStyle = "black";
   ctx.beginPath();
-  ctx.moveTo(0, canvas.height-sol);
-  ctx.lineTo(canvas.width, canvas.height-sol);
+  ctx.moveTo(0, sol);
+  ctx.lineTo(canvas.width, sol);
   ctx.stroke();
   ctx.restore();
   
-  moveCamera();
+  //moveCamera();
 
   requestAnimationFrame(updateCanvas);
 }
@@ -232,9 +228,8 @@ function playerDeplacement(){
 
 function playerCollision(){
   perso.dy += gravite;
-  if(perso.y > (canvas.height - sol) && perso.dy>0){
-    perso.y = canvas.height - sol;
-    arc.y = perso.brasY;
+  if(perso.y+perso.height > (sol) && perso.dy>0){
+    perso.y = sol-perso.height;
     perso.dy = 0;
   }
   if(perso.x >= (canvas.width -20)&& perso.dx>0){
@@ -244,9 +239,9 @@ function playerCollision(){
 
 function playerPlatform(platformArray){
   //Taille du perso = y+20
-  let persoFeet = perso.y+20;
+  let persoFeet = perso.y+perso.height;
   let persoMiddle = perso.x;
-  let persoRadius = 30/2;
+  let persoRadius = perso.width/2;
 
   for(let i=0;i<platformArray.length;i++){
     let platformRadius = platformArray[i].width/2;
@@ -257,7 +252,7 @@ function playerPlatform(platformArray){
     if(totalRadius>=distanceBetween && perso.dy>0){ //Platform interessante
       if(persoFeet>platformArray[i].y && persoFeet<platformArray[i].y+platformArray[i].height){
         perso.dy = 0;
-        perso.y = platformArray[i].y-20;
+        perso.y = platformArray[i].y-perso.height;
         return platformArray[i];
       }
     }
