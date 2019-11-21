@@ -5,6 +5,8 @@ export class Personnage{
         this.x = x1;
         this.y = y1; 
         this.ctx = ctx;
+
+        this.DXMAX = 400;
         
         //variable de la tête
         this.teteX = this.x;
@@ -88,28 +90,33 @@ export class Personnage{
         this.ctx.restore();
     }
   
-  deplacePersonnage(){
-      this.x += this.dx;
-      this.y += this.dy;
+  deplacePersonnage(delta){
+      if(this.dx>this.DXMAX)
+        this.dx = this.DXMAX;
+      else if(this.dx<-this.DXMAX)
+        this.dx = -this.DXMAX;
+      else;
+      this.x += this.dx*(delta/1000);
+      this.y += this.dy*(delta/1000);
     
       //Deplacement en X
-      this.teteX += this.dx;
-      this.corpsX += this.dx;
-      this.brasX += this.dx;
-      this.jambeX += this.dx;
-      this.angleCX += this.dx;
-      this.angleBX += this.dx;
-      this.angleJX1 += this.dx;
-      this.angleJX2 += this.dx;
+      this.teteX += this.dx*(delta/1000);
+      this.corpsX += this.dx*(delta/1000);
+      this.brasX += this.dx*(delta/1000);
+      this.jambeX += this.dx*(delta/1000);
+      this.angleCX += this.dx*(delta/1000);
+      this.angleBX += this.dx*(delta/1000);
+      this.angleJX1 += this.dx*(delta/1000);
+      this.angleJX2 += this.dx*(delta/1000);
       
       //Deplacement en Y
-      this.teteY += this.dy;
-      this.corpsY += this.dy;
-      this.angleCY += this.dy;
-      this.brasY += this.dy;
-      this.angleBY +=this.dy;
-      this.jambeY += this.dy;
-      this.angleJY += this.dy;
+      this.teteY += this.dy*(delta/1000);
+      this.corpsY += this.dy*(delta/1000);
+      this.angleCY += this.dy*(delta/1000);
+      this.brasY += this.dy*(delta/1000);
+      this.angleBY +=this.dy*(delta/1000);
+      this.jambeY += this.dy*(delta/1000);
+      this.angleJY += this.dy*(delta/1000);
 
     }
 }
