@@ -262,12 +262,9 @@ function playerPlatform(platformArray){
 
 function ennemyCollision(ennemy, arrayPlateform){
   //Feet ennemy
-  let feetX1 = ennemy.x+ennemy.width/3;
-  let feetX2 = ennemy.x+ennemy.width/1.75;
   let feetY = ennemy.y+ennemy.height;
-
-  let feetRadius = (feetX2-feetX1)/2;
-  let feetMiddle = feetX1+feetRadius;
+  let feetRadius = ennemy.width/2.5;
+  let feetMiddle = ennemy.x;
 
   for(let i=0;i<arrayPlateform.length;i++){
     //Check le X si la plateforme est "interessante"
