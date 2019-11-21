@@ -27,6 +27,7 @@ var scoreScreenButton;
 var score = 0;
 var delta = 1;
 var t1 = null;
+var cameraSpeed = 1;
 
 //Init game world variable
 var platformArray = [];
@@ -34,10 +35,12 @@ var arrowArray = [];
 var ennemyArray = [];
 
 //Player variable
-var player;
 var sol = 0;
 var perso;
-var ctx;
+var persoWidth = 30;
+var persoHeight = 50;
+var deplacementDroite = false;
+var deplacementGauche = false;
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
@@ -58,11 +61,10 @@ function init(){
   canvas.width = window.innerWidth;
 
   ctx = canvas.getContext("2d");
-  sol = (canvas.clientHeight/20);
+  sol = canvas.height-canvas.clientHeight/20;
 
   //Creation du personnage
-  perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
-
+  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, "blue", ctx);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -79,43 +81,31 @@ function init(){
   scoreScreenDiv.style.visibility = "hidden";
   scoreScreenButton = document.querySelector("#scoreScreen button");
   scoreScreenButton.onclick = newGame;
-  //display the original frame
-
 
   //Listener pour le déplacement
   window.addEventListener('keydown',function(event){
     if(event.keyCode === 39 ){
-      perso.dx += 1  
-      this.console.log("Le perso avance à droite");
+      deplacementDroite = true;
     }
     if(event.keyCode === 37 ){
-      perso.dx -= 1 ;
-      this.console.log("Le perso avance à gauche");
+      deplacementGauche = true;
     }
     if(event.keyCode === 38 && perso.dy>=0){
-      perso.dy -= 10;
-      console.log(perso.dy);
+      perso.dy -= 500;
     }
   });
-
 
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
-      perso.dx = 0;
-
-       this.console.log("Le perso avance à droite");
+      deplacementDroite = false;
     }
     if(event.keyCode === 37){
-      perso.dx = 0; 
-
-      this.console.log("Le perso avance à gauche");
+      deplacementGauche = false;
     }
-
-
   });
 
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 450, 5, platformArray, canvas, ctx);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 20, platformArray, canvas, ctx);
   //Générateur d'ennemis
   ennemyGenerator = new EnnemyGenerator(250, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, ctx);
   updateCanvas();
@@ -168,9 +158,9 @@ function updateCanvas(timestamp){
       item.vy = 0;
       item.y = platformCollide.y-item.height;
     }
-    else if(item.y >= canvas.height-sol-item.height){ //Collision avec le sol
+    else if(item.y >= sol-item.height){ //Collision avec le sol
       item.vy = 0;
-      item.y = canvas.height-sol-item.height;
+      item.y = sol-item.height;
     }
     else;
 
@@ -184,31 +174,67 @@ function updateCanvas(timestamp){
     }
   });
 
+  playerDeplacement();
   playerCollision();
-  perso.deplacePersonnage();
+  playerPlatform(platformArray);
+  perso.deplacePersonnage(delta);
   perso.drawPersonnage();
 
   //Draw du sol
   ctx.save();
   ctx.strokeStyle = "black";
   ctx.beginPath();
-  ctx.moveTo(0, canvas.height-sol);
-  ctx.lineTo(canvas.width, canvas.height-sol);
+  ctx.moveTo(0, sol);
+  ctx.lineTo(canvas.width, sol);
   ctx.stroke();
   ctx.restore();
   
+  //moveCamera();
+
   requestAnimationFrame(updateCanvas);
 }
 
+function playerDeplacement(){
+  if(deplacementDroite)
+    perso.dx += 50;
+  else if(deplacementGauche)
+    perso.dx -= 50;
+  else
+    perso.dx = 0;
+}
+
 function playerCollision(){
-  perso.dy += gravite*delta/1000;
-  if(perso.y > (canvas.height - sol) && perso.dy>0){
-    perso.y = canvas.height - sol;
+  perso.dy += gravite;
+  if(perso.y+perso.height > (sol) && perso.dy>0){
+    perso.y = sol-perso.height;
     perso.dy = 0;
   }
   if(perso.x >= (canvas.width -20)&& perso.dx>0){
     perso.dx = 0;
   }
+}
+
+function playerPlatform(platformArray){
+  //Taille du perso = y+20
+  let persoFeet = perso.y+perso.height;
+  let persoMiddle = perso.x;
+  let persoRadius = perso.width/2;
+
+  for(let i=0;i<platformArray.length;i++){
+    let platformRadius = platformArray[i].width/2;
+    let platformMiddle = platformArray[i].x+platformRadius;
+    
+    let distanceBetween = Math.abs(persoMiddle-platformMiddle);
+    let totalRadius = persoRadius+platformRadius;
+    if(totalRadius>=distanceBetween && perso.dy>0){ //Platform interessante
+      if(persoFeet>platformArray[i].y && persoFeet<platformArray[i].y+platformArray[i].height){
+        perso.dy = 0;
+        perso.y = platformArray[i].y-perso.height;
+        return platformArray[i];
+      }
+    }
+  }
+  return null;
 }
 
 function ennemyCollision(ennemy, arrayPlateform){
@@ -236,6 +262,16 @@ function ennemyCollision(ennemy, arrayPlateform){
   }
 
   return null;
+}
+
+function moveCamera(){
+  perso.x -= cameraSpeed;
+  platformArray.forEach((item)=>{
+    item.x -= cameraSpeed;
+  });
+  ennemyArray.forEach((item)=>{
+    item.x -= cameraSpeed;
+  });
 }
 
 
