@@ -28,7 +28,7 @@ var score = 0;
 var delta = 1;
 var t1 = null;
 var cameraSpeed = 50;
-var cameraIncrement = 20;
+var cameraIncrement = 0.10;
 
 //Init game world variable
 var platformArray = [];
@@ -275,7 +275,7 @@ function moveCamera(delta){
   ennemyArray.forEach((item)=>{
     item.x -= cameraSpeed*(delta/1000);
   });
-  cameraSpeed += 0.10;
+  cameraSpeed += cameraIncrement;
 }
 
 
