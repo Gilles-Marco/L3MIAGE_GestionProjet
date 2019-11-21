@@ -2,7 +2,7 @@ import { Platform } from "./plateforme.js";
 
 export class PlatformGenerator{
 
-    constructor(cursor, platformWidth, platformHeight, platformDensity, cursorjump, arrayPlatform, canvas, ctx){
+    constructor(cursor, platformWidth, platformHeight, platformDensity, cursorjump, arrayPlatform, sol, canvas, ctx){
         /**
          * cursor -> l'endroit où le générateur regarde pour placer une plateform
          * platformWidth -> largeur des plateformes créer
@@ -18,13 +18,14 @@ export class PlatformGenerator{
         this.arrayPlatform = arrayPlatform;
         this.cursorjump = cursorjump;
         this.ctx = ctx;
+        this.sol = sol;
     }
 
     generate(){
         /**
          * Regarde pour générer une plateforme et la push dans la liste du jeu donner en parametre
          */
-        if(this.cursor<this.canvas.clientWidth){
+        if(this.cursor<this.canvas.clientWidth-100){
             this.cursor += this.cursorjump
         }
 
@@ -36,8 +37,11 @@ export class PlatformGenerator{
         
         //créer une plateforme
         //Génération d'un Y aléatoire
+        let platY = Math.random()*this.canvas.clientHeight;
+        while(platY+this.platformHeight>this.sol)
+            platY = Math.random()*this.canvas.clientHeight;
         //Check  si la plateforme ne se collide pas
-        let platform = new Platform(this.cursor, Math.random()*this.canvas.clientHeight, this.platformWidth, this.platformHeight, this.ctx);
+        let platform = new Platform(this.cursor, platY, this.platformWidth, this.platformHeight, this.ctx);
         let nbPlat = Math.ceil(this.platformWidth/this.platformDensity);
         let min = (this.arrayPlatform.length-nbPlat>0) ? this.arrayPlatform.length-nbPlat : 0;
         let buffArray = this.arrayPlatform.slice(min, this.arrayPlatform.length);
