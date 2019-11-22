@@ -267,6 +267,36 @@ function ennemyCollision(ennemy, arrayPlateform){
   return null;
 }
 
+function ennemyOut(){
+  /**
+   * Check if ennemys are out of screen and delete them from the list, making the player lose a HP
+   */
+  ennemyArray.forEach((item, index)=>{
+    if(item.x+item.width<0){
+      perso.hp -= 1;
+      ennemyArray.splice(index, index);
+    }
+  });
+}
+
+function platformOut(){
+  /**
+   * Check if a platform are out of the screen and delete it from the list
+   */
+
+  platformArray.forEach((item, index)=>{
+    if(item.x+item.width<0)
+      platformArray.splice(index, index);
+  });
+}
+
+function arrowStopeed(){
+  /**
+   * Check if an arrow has no VX and delete it from the game
+   */
+  console.log("ArrowStopped not implemented");
+}
+
 function moveCamera(delta){
   perso.x -= cameraSpeed*(delta/1000);
   platformArray.forEach((item)=>{
