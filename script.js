@@ -132,8 +132,8 @@ function init(){
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
   ennemyGenerator = new EnnemyGenerator(150, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, canvas, ctx);
-  updateCanvas();
-
+  if(DEBUG)
+    updateCanvas();
 }
 
 
