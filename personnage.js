@@ -1,6 +1,6 @@
-//Constructeur de p{ersonnage
+//Constructeur de personnage
 export class Personnage{
-    constructor(x1,y1,width,height,color,ctx){
+    constructor(x1,y1,width,height, DXMAX, color,ctx){
         this.vie = 3;
         this.x = x1;
         this.y = y1; 
@@ -28,6 +28,8 @@ export class Personnage{
         this.angleJX1 = 35;
         this.angleJX2 = 25;
         this.angleJY = this.y+20;
+
+        this.DXMAX = DXMAX;
       
         this.width=width;
         this.height=height;
@@ -36,76 +38,43 @@ export class Personnage{
         //Delta déplacements
         this.dx = 0;
         this.dy = 0;
-        console.log("Personnage créé en X :"+this.x +" Y :"+this.y);     
     }
   
     drawPersonnage(){
-        //variable de la tête
-        this.teteX = this.x;
-        this.teteY = this.y-30;
-      
-        //Variable du corps
-        this.corpsX = this.x;
-        this.corpsY = this.y-20;
-        this.angleCY = this.y;
-      
-        //Variable du bras
-        this.brasX = this.x;
-        this.brasY = this.y-10;
-        this.angleBY = this.y-10;
-      
-        //Variable jambe
-        this.jambeX = this.x;
-        this.jambeY = this.y;
-        this.angleJY = this.y+20;
+        this.ctx.save();
 
+        this.ctx.fillStyle = this.color;
         this.ctx.strokeStyle = this.color;
+
+        //Tete
         this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y+this.height/10, this.width/3, 0, Math.PI*2);
+        this.ctx.fill();
 
-        //Draw la tete
-        this.ctx.arc(this.teteX,this.teteY,10,0,2* Math.PI);
-
-        //Draw corps
-        this.ctx.moveTo(this.corpsX, this.corpsY);
-        this.ctx.lineTo(this.angleCX, this.angleCY);
-        
-        //Draw bras
-        this.ctx.moveTo(this.brasX,this.brasY);
-        this.ctx.lineTo(this.angleBX,this.angleBY);
-    
-        //Draw jambes
-        this.ctx.moveTo(this.jambeX,this.jambeY);
-        this.ctx.lineTo(this.angleJX1,this.angleJY);
-        
-        this.ctx.moveTo(this.jambeX,this.jambeY);
-        this.ctx.lineTo(this.angleJX2,this.angleJY);
-    
+        //Corps
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y+this.height/10);
+        this.ctx.lineTo(this.x, this.y+this.height/1.5);
+        //Pied
+        this.ctx.lineTo(this.x-this.width/7, this.y+this.height);
+        this.ctx.moveTo(this.x, this.y+this.height/1.5);
+        this.ctx.lineTo(this.x+this.width/7, this.y+this.height);
+        //Bras
+        this.ctx.moveTo(this.x, this.y+this.height/2);
+        this.ctx.lineTo(this.x+this.width/3, this.y+this.height/2);
         this.ctx.stroke();
-        this.ctx.closePath();
+
+        this.ctx.restore();
     }
   
-  deplacePersonnage(){
-      this.x += this.dx;
-      this.y += this.dy;
-    
-      //Deplacement en X
-      this.teteX += this.dx;
-      this.corpsX += this.dx;
-      this.brasX += this.dx;
-      this.jambeX += this.dx;
-      this.angleCX += this.dx;
-      this.angleBX += this.dx;
-      this.angleJX1 += this.dx;
-      this.angleJX2 += this.dx;
-      
-      //Deplacement en Y
-      this.teteY += this.dy;
-      this.corpsY += this.dy;
-      this.angleCY += this.dy;
-      this.brasY += this.dy;
-      this.angleBY +=this.dy;
-      this.jambeY += this.dy;
-      this.angleJY += this.dy;
+    deplacePersonnage(delta){
+        if(this.dx>this.DXMAX)
+            this.dx = this.DXMAX;
+        else if(this.dx<-this.DXMAX)
+            this.dx = -this.DXMAX;
+        else;
 
+        this.x += this.dx*(delta/1000);
+        this.y += this.dy*(delta/1000);
     }
 }

@@ -29,7 +29,10 @@ var scoreScreenButton;
 
 //Game variable
 var score = 0;
+var delta = 1;
 var t1 = null;
+var cameraSpeed = 50;
+var cameraIncrement = 0.10;
 
 //Init game world variable
 var platformArray = [];
@@ -41,6 +44,11 @@ var sol = 0;
 var perso;
 var  arc;
 var ctx;
+const persoWidth = 30;
+const persoHeight = 50;
+const persoDXMAX = 400;
+var deplacementDroite = false;
+var deplacementGauche = false;
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
@@ -50,10 +58,8 @@ var platformGenerator;
 
 //Ennemy variable
 var ennemyGenerator;
-
-var t1 = 1;
-var delta = 1;
-var score = 0;
+const ennemyWidth = 30;
+const ennemyHeight = 50;
 
 function init(){
   console.log("Page chargée");
@@ -64,12 +70,11 @@ function init(){
   canvas.width = window.innerWidth;
 
   ctx = canvas.getContext("2d");
-  sol = (canvas.clientHeight/20);
+  sol = canvas.height-canvas.clientHeight/20;
 
   //Creation du personnage
-  perso = new Personnage(30, (canvas.clientHeight - sol),20,20,"blue",ctx);
+  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
   arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
-
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -86,25 +91,17 @@ function init(){
   scoreScreenDiv.style.visibility = "hidden";
   scoreScreenButton = document.querySelector("#scoreScreen button");
   scoreScreenButton.onclick = newGame;
-  //display the original frame
-
 
   //Listener pour le déplacement
   window.addEventListener('keydown',function(event){
     if(event.keyCode === 39 ){
-      perso.dx += 1  ;
-
-      this.console.log("Le perso avance à droite");
+      deplacementDroite = true;
     }
     if(event.keyCode === 37 ){
-      perso.dx -= 1 ;
-
-      this.console.log("Le perso avance à gauche");
+      deplacementGauche = true;
     }
     if(event.keyCode === 38 && perso.dy>=0){
-      perso.dy -= 10;
-      
-      console.log(perso.dy);
+      perso.dy -= 500;
     }
 
     if(event.keyCode === 32){
@@ -112,42 +109,33 @@ function init(){
     }
   });
 
-
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
-      perso.dx = 0;
- 
-
-       this.console.log("Le perso avance à droite");
-    }
-    if(event.keyCode === 37){
-      perso.dx = 0; 
-
-
-      this.console.log("Le perso avance à gauche");
+      deplacementDroite = false;
     }
 
     if(event.keyCode === 32 ){
       arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance));
       this.console.log("Espace a été relaché, puissance : " + arc.puissance);
-      arc.puissance =4;
-      arrowArray.c
-      
+      arc.puissance =4;      
+    }
+    
+    if(event.keyCode === 37){
+      deplacementGauche = false;
     }
   });
   
 
 
 
+  //Timer pour faire accélérer la caméra
+
   //Générateur de platform
-  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 50, 5, platformArray, canvas, ctx);
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
-  ennemyGenerator = new EnnemyGenerator(250, ennemyArray, 0, 10, ctx);
-
- 
-
-  updateCanvas();
-
+  ennemyGenerator = new EnnemyGenerator(150, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, canvas, ctx);
+  if(DEBUG)
+    updateCanvas();
 }
 
 
@@ -169,22 +157,52 @@ function updateCanvas(timestamp){
 
   // Affichage FPS
   drawFps(delta);
+
+  moveCamera(delta);
   
+  //Nettoyage des plateformes inutiles dans platformArray TODO
+  //Nettoyage des ennemis inuiles dans ennemyArray TODO
+  //Nettoyage des flèches inutiles dans arrowArray TODO
+
   //Generation des plateformes
   platformGenerator.generate();
   //Generation des ennemys
-  ennemyGenerator.generate();
-
+  if(platformGenerator.cursor>=canvas.width*0.80)
+    ennemyGenerator.generate();
   //Draw Platform
   platformArray.forEach((item, index)=>{
     item.draw();
+    if(DEBUG){
+      ctx.save();
+      ctx.fillStyle = "red";
+      ctx.fillText(index, item.x+item.width/2, item.y+item.height/2);
+      ctx.restore();
+    }
   });
   //Draw des ennemys
   ennemyArray.forEach((item, index)=>{
-    //Collision TODO
-    //Gravite TODO
+    //Gravite
+    item.vy += gravite*(delta/1000);
+    //Collision
+    let platformCollide = ennemyCollision(item, platformArray);
+    if(platformCollide!=null){ //Collision avec une plateforme
+      item.vy = 0;
+      item.y = platformCollide.y-item.height;
+    }
+    else if(item.y >= sol-item.height){ //Collision avec le sol
+      item.vy = 0;
+      item.y = sol-item.height;
+    }
+    else;
+
     item.update();
     item.draw();
+    if(DEBUG){
+      ctx.save();
+      ctx.fillStyle = "red";
+      ctx.fillText(index, item.x+item.width/3, item.y+item.height/2);
+      ctx.restore();
+    }
   });
 
   arrowArray.forEach((item,index)=>{
@@ -192,25 +210,34 @@ function updateCanvas(timestamp){
     item.deplacerArrow();
   });
 
-
-  // 2 - Test des collision du joueur
+  playerDeplacement();
   playerCollision();
-  
-
-  // 3 - Deplacement personnage
-  perso.deplacePersonnage();
-  arc.deplacerArc(perso.dx,perso.dy);
-
- 
-  
-   // 4 - Draw
+  playerPlatform(platformArray);
+  perso.deplacePersonnage(delta);
   perso.drawPersonnage();
   arc.drawArc();
 
-
+  //Draw du sol
+  ctx.save();
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(0, sol);
+  ctx.lineTo(canvas.width, sol);
+  ctx.stroke();
+  ctx.restore();
   
-  // 5 - Animation
   requestAnimationFrame(updateCanvas);
+}
+
+function playerDeplacement(){
+  //Pour éviter que le personnage se fasse ejecter par la vitesse de la caméra à "haut niveau"
+  perso.DXMAX = persoDXMAX+cameraSpeed;
+  if(deplacementDroite)
+    perso.dx += 50+cameraSpeed;
+  else if(deplacementGauche)
+    perso.dx -= 50+cameraSpeed;
+  else
+    perso.dx = 0;
 }
 
 function playerCollision(){
@@ -222,8 +249,95 @@ function playerCollision(){
   }
  if(perso.x >= (canvas.width -30)&& perso.dx>0){
     perso.dx = 0;
-  
   }
+}
+
+function playerPlatform(platformArray){
+  //Taille du perso = y+20
+  let persoFeet = perso.y+perso.height;
+  let persoMiddle = perso.x;
+  let persoRadius = perso.width/2;
+
+  for(let i=0;i<platformArray.length;i++){
+    let platformRadius = platformArray[i].width/2;
+    let platformMiddle = platformArray[i].x+platformRadius;
+    
+    let distanceBetween = Math.abs(persoMiddle-platformMiddle);
+    let totalRadius = persoRadius+platformRadius;
+    if(totalRadius>=distanceBetween && perso.dy>0){ //Platform interessante
+      if(persoFeet>platformArray[i].y && persoFeet<platformArray[i].y+platformArray[i].height){
+        perso.dy = 0;
+        perso.y = platformArray[i].y-perso.height;
+        return platformArray[i];
+      }
+    }
+  }
+  return null;
+}
+
+function ennemyCollision(ennemy, arrayPlateform){
+  //Feet ennemy
+  let feetY = ennemy.y+ennemy.height;
+  let feetRadius = ennemy.width/2.5;
+  let feetMiddle = ennemy.x;
+
+  for(let i=0;i<arrayPlateform.length;i++){
+    //Check le X si la plateforme est "interessante"
+    let platformRadius = arrayPlateform[i].width/2;
+    let platformMiddle = arrayPlateform[i].x+platformRadius;
+
+    let distanceBetween = Math.abs(feetMiddle-platformMiddle);
+    let totalRadius = feetRadius+platformRadius;
+    if(distanceBetween<=totalRadius && feetY<=arrayPlateform[i].y+arrayPlateform[i].height){
+      //Check si la hauteur est bonne
+      if(arrayPlateform[i].y<=feetY && arrayPlateform[i].y+arrayPlateform[i].height >= feetY){
+        return arrayPlateform[i];
+      }
+    }
+  }
+
+  return null;
+}
+
+function ennemyOut(){
+  /**
+   * Check if ennemys are out of screen and delete them from the list, making the player lose a HP
+   */
+  ennemyArray.forEach((item, index)=>{
+    if(item.x+item.width<0){
+      perso.hp -= 1;
+      ennemyArray.splice(index, index);
+    }
+  });
+}
+
+function platformOut(){
+  /**
+   * Check if a platform are out of the screen and delete it from the list
+   */
+
+  platformArray.forEach((item, index)=>{
+    if(item.x+item.width<0)
+      platformArray.splice(index, index);
+  });
+}
+
+function arrowStopeed(){
+  /**
+   * Check if an arrow has no VX and delete it from the game
+   */
+  console.log("ArrowStopped not implemented");
+}
+
+function moveCamera(delta){
+  perso.x -= cameraSpeed*(delta/1000);
+  platformArray.forEach((item)=>{
+    item.x -= cameraSpeed*(delta/1000);
+  });
+  ennemyArray.forEach((item)=>{
+    item.x -= cameraSpeed*(delta/1000);
+  });
+  cameraSpeed += cameraIncrement;
 }
 
 
