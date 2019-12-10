@@ -5,29 +5,6 @@ export class Personnage{
         this.x = x1;
         this.y = y1; 
         this.ctx = ctx;
-        
-        //variable de la tête
-        this.teteX = this.x;
-        this.teteY = this.y-30;
-      
-        //Variable du corps
-        this.corpsX = this.x;
-        this.corpsY = this.y-20;
-        this.angleCX = 30;
-        this.angleCY = this.y;
-      
-        //Variable du bras
-        this.brasX = this.x;
-        this.brasY = this.y-10;
-        this.angleBX = 50;
-        this.angleBY = this.y-10;
-      
-        //Variable jambe
-        this.jambeX = this.x;
-        this.jambeY = this.y;
-        this.angleJX1 = 35;
-        this.angleJX2 = 25;
-        this.angleJY = this.y+20;
 
         this.DXMAX = DXMAX;
       
