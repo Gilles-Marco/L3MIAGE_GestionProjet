@@ -4,6 +4,8 @@ import { Platform } from "./platform/plateforme.js";
 import { Ennemy } from "./ennemy/ennemy.js";
 import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 import {Personnage} from "./personnage.js";
+import {Arc} from "./arc.js";
+import {Arrow} from "./arrow.js";
 
 window.onload = init;
 
@@ -68,6 +70,7 @@ function init(){
 
   //Creation du personnage
   perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
+  arc = new Arc(perso.x, perso.y+perso.height/2, ctx, perso.dx,perso.dy);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -95,6 +98,9 @@ function init(){
     }
     if(event.keyCode === 38 && perso.dy>=0){
       perso.dy -= 500;
+    }
+    if(event.keyCode === 32){
+      arc.puissance +=0.1;
     }
   });
 
@@ -187,11 +193,18 @@ function updateCanvas(timestamp){
     }
   });
 
+  arrowArray.forEach((item)=>{
+    item.drawArrow();
+    item.deplacerArrow();
+  });
+
   playerDeplacement();
   playerCollision();
   playerPlatform(platformArray);
   perso.deplacePersonnage(delta);
+  moveArc();
   perso.drawPersonnage();
+  arc.drawArc();
 
   //Draw du sol
   ctx.save();
@@ -225,6 +238,11 @@ function playerCollision(){
   if(perso.x >= (canvas.width -20)&& perso.dx>0){
     perso.dx = 0;
   }
+}
+
+function moveArc(){
+  arc.x = perso.x; 
+  arc.y = perso.y+perso.height/2;
 }
 
 function playerPlatform(platformArray){
