@@ -4,10 +4,6 @@ import { Platform } from "./platform/plateforme.js";
 import { Ennemy } from "./ennemy/ennemy.js";
 import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 import {Personnage} from "./personnage.js";
-import {Arc} from "./arc.js";
-import {Arrow} from "./arrow/arrow.js";
-
-
 
 window.onload = init;
 
@@ -54,7 +50,6 @@ const platformWidth = 120;
 const platformHeight = 30;
 var platformGenerator;
 
-
 //Ennemy variable
 var ennemyGenerator;
 const ennemyWidth = 30;
@@ -73,7 +68,6 @@ function init(){
 
   //Creation du personnage
   perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
-  arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -102,10 +96,6 @@ function init(){
     if(event.keyCode === 38 && perso.dy>=0){
       perso.dy -= 500;
     }
-
-    if(event.keyCode === 32){
-      arc.puissance +=0.1;
-    }
   });
 
   window.addEventListener('keyup',function(event){
@@ -122,9 +112,6 @@ function init(){
       arc.puissance =4;
     }
   });
-  
-
-
 
   //Timer pour faire accélérer la caméra
 
@@ -136,7 +123,6 @@ function init(){
     updateCanvas();
 }
 
-
 function updateCanvas(timestamp){
   //Main function loop
   //Redraw the background
@@ -144,9 +130,7 @@ function updateCanvas(timestamp){
   ctx.fillStyle="lightgrey";
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx.restore();
-
-
-
+  
   //Get time delta
   if(timestamp!=undefined){
     delta = timestamp-t1;
@@ -330,7 +314,6 @@ function moveCamera(delta){
   });
   cameraSpeed += cameraIncrement;
 }
-
 
 
 function startGame(){
