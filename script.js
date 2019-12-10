@@ -4,6 +4,10 @@ import { Platform } from "./platform/plateforme.js";
 import { Ennemy } from "./ennemy/ennemy.js";
 import { EnnemyGenerator } from "./ennemy/ennemyGenerator.js";
 import {Personnage} from "./personnage.js";
+import {Arc} from "./arc.js";
+import {Arrow} from "./arrow/arrow.js";
+
+
 
 window.onload = init;
 
@@ -38,6 +42,8 @@ var ennemyArray = [];
 //Player variable
 var sol = 0;
 var perso;
+var  arc;
+var ctx;
 const persoWidth = 30;
 const persoHeight = 50;
 const persoDXMAX = 400;
@@ -48,6 +54,7 @@ var deplacementGauche = false;
 const platformWidth = 120;
 const platformHeight = 30;
 var platformGenerator;
+
 
 //Ennemy variable
 var ennemyGenerator;
@@ -67,6 +74,7 @@ function init(){
 
   //Creation du personnage
   perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
+  arc = new Arc(perso.brasX+10,perso.brasY,ctx, perso.dx,perso.dy);
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
@@ -95,16 +103,30 @@ function init(){
     if(event.keyCode === 38 && perso.dy>=0){
       perso.dy -= 500;
     }
+
+    if(event.keyCode === 32){
+      arc.puissance +=0.1;
+    }
   });
 
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
       deplacementDroite = false;
     }
+
+    if(event.keyCode === 32 ){
+      arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance));
+      this.console.log("Espace a été relaché, puissance : " + arc.puissance);
+      arc.puissance =4;      
+    }
+    
     if(event.keyCode === 37){
       deplacementGauche = false;
     }
   });
+  
+
+
 
   //Timer pour faire accélérer la caméra
 
@@ -116,6 +138,7 @@ function init(){
     updateCanvas();
 }
 
+
 function updateCanvas(timestamp){
   //Main function loop
   //Redraw the background
@@ -123,7 +146,9 @@ function updateCanvas(timestamp){
   ctx.fillStyle="lightgrey";
   ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   ctx.restore();
-  
+
+
+
   //Get time delta
   if(timestamp!=undefined){
     delta = timestamp-t1;
@@ -180,11 +205,17 @@ function updateCanvas(timestamp){
     }
   });
 
+  arrowArray.forEach((item,index)=>{
+    item.drawArrow();
+    item.deplacerArrow();
+  });
+
   playerDeplacement();
   playerCollision();
   playerPlatform(platformArray);
   perso.deplacePersonnage(delta);
   perso.drawPersonnage();
+  arc.drawArc();
 
   //Draw du sol
   ctx.save();
@@ -194,7 +225,7 @@ function updateCanvas(timestamp){
   ctx.lineTo(canvas.width, sol);
   ctx.stroke();
   ctx.restore();
-
+  
   requestAnimationFrame(updateCanvas);
 }
 
@@ -210,12 +241,13 @@ function playerDeplacement(){
 }
 
 function playerCollision(){
-  perso.dy += gravite;
-  if(perso.y+perso.height > (sol) && perso.dy>0){
-    perso.y = sol-perso.height;
+  perso.dy += gravite*delta/1000;
+  if(perso.y > (canvas.height - sol) && perso.dy>0){
+    perso.y = canvas.height - sol;
+    arc.y = perso.brasY;
     perso.dy = 0;
   }
-  if(perso.x >= (canvas.width -20)&& perso.dx>0){
+ if(perso.x >= (canvas.width -30)&& perso.dx>0){
     perso.dx = 0;
   }
 }
@@ -307,6 +339,7 @@ function moveCamera(delta){
   });
   cameraSpeed += cameraIncrement;
 }
+
 
 
 function startGame(){
