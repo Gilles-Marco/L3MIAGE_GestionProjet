@@ -17,7 +17,7 @@ export class Personnage{
         this.dy = 0;
     }
   
-    drawPersonnage(){
+    drawPersonnage(mouseX, mouseY){
         this.ctx.save();
 
         this.ctx.fillStyle = this.color;
@@ -36,9 +36,17 @@ export class Personnage{
         this.ctx.lineTo(this.x-this.width/7, this.y+this.height);
         this.ctx.moveTo(this.x, this.y+this.height/1.5);
         this.ctx.lineTo(this.x+this.width/7, this.y+this.height);
+
+
+        var angle = Math.atan2(mouseX-this.x, mouseY-this.y);
+
+        this.ctx.translate(this.x, this.y + this.height/2);
+        this.ctx.rotate(-angle);
+
         //Bras
-        this.ctx.moveTo(this.x, this.y+this.height/2);
-        this.ctx.lineTo(this.x+this.width/3, this.y+this.height/2);
+        this.ctx.moveTo(0, 0);
+        this.ctx.lineTo(0, this.height/5);
+
         this.ctx.stroke();
 
         this.ctx.restore();

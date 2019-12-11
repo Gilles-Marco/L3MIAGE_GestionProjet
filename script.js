@@ -217,7 +217,7 @@ function updateCanvas(timestamp){
   playerPlatform(platformArray);
   perso.deplacePersonnage(delta);
   moveArc();
-  perso.drawPersonnage();
+  perso.drawPersonnage(mousePos.x, mousePos.y);
   arc.drawArc(mousePos.x, mousePos.y);
 
   //Draw du sol
