@@ -46,7 +46,7 @@ const persoDXMAX = 400;
 var  arc;
 var deplacementDroite = false;
 var deplacementGauche = false;
-var persoTouche = false;
+var mousePos;
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
@@ -119,6 +119,12 @@ function init(){
     }
   });
 
+  window.addEventListener('mousemove',function(event){
+      mousePos = getMousePos(canvas,event);
+
+ 
+  },false);
+
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
@@ -126,6 +132,14 @@ function init(){
   if(DEBUG){
     updateCanvas();
   }
+}
+
+function getMousePos(canvas,event){
+  var rect = canvas.getBoundingClientRect();
+  return{
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+  };
 }
 
 function updateCanvas(timestamp){
@@ -204,7 +218,7 @@ function updateCanvas(timestamp){
   perso.deplacePersonnage(delta);
   moveArc();
   perso.drawPersonnage();
-  arc.drawArc();
+  arc.drawArc(mousePos.x, mousePos.y);
 
   //Draw du sol
   ctx.save();
