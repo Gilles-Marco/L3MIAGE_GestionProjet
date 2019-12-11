@@ -12,6 +12,7 @@ export class Arc{
 
     //Dessin de l'arc à partir d'un arc de cercle et d'une ligne4
     drawArc(){
+        this.ctx.save();
         this.ctx.beginPath();
         
         //Coordonéne d'angle de départ et de fin en negatif pour inverser l'arc de cercle
@@ -23,5 +24,6 @@ export class Arc{
 
         this.ctx.stroke();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }

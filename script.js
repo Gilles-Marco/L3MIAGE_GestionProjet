@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = false;
+const DEBUG = true;
 
 //Game physics
 const gravite = 9.8;
@@ -216,6 +216,9 @@ function updateCanvas(timestamp){
   ctx.stroke();
   ctx.restore();
 
+  //draw du score
+  drawScore(ctx, score);
+
   requestAnimationFrame(updateCanvas);
 }
 
@@ -332,6 +335,21 @@ function moveCamera(delta){
     item.x -= cameraSpeed*(delta/1000);
   });
   cameraSpeed += cameraIncrement;
+}
+
+function drawScore(ctx, score){
+  //Get the middle of the screen
+  let middleX = canvas.width/2;
+  let y = canvas.height/20;
+  let font_size = 24;
+  let length_score = score+"";
+  console.log(length_score.length);
+  length_score = length_score*font_size;
+  ctx.save();
+  ctx.font = `${font_size}px sans-serif`;
+  ctx.fillStyle = "black";
+  ctx.fillText(score, middleX-length_score, y);
+  ctx.restore();
 }
 
 
