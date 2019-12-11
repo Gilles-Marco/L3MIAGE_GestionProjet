@@ -11,19 +11,37 @@ export class Arc{
     }
 
     //Dessin de l'arc à partir d'un arc de cercle et d'une ligne4
-    drawArc(){
+    drawArc(mouseX, mouseY){
         this.ctx.save();
+
+
+        var angle = Math.atan2(mouseX-this.x, mouseY-this.y);
+
+        console.log(angle);
+
+
+        this.ctx.translate(this.x,this.y);
+        this.ctx.rotate(-angle-(Math.PI/2));
+
         this.ctx.beginPath();
         
-        //Coordonéne d'angle de départ et de fin en negatif pour inverser l'arc de cercle
+        
+        //Coordonnée d'angle de départ et de fin en negatif pour inverser l'arc de cercle
         //cf. cercle Trigo
-        this.ctx.arc(this.x,this.y,10, -Math.PI/2,-3* Math.PI/2);
+        
+        this.ctx.arc(0,0,10,Math.PI/2,3* Math.PI/2);
+        
 
-        this.ctx.moveTo(this.x, this.y-10);
-        this.ctx.lineTo(this.x,this.y+10);
+        this.ctx.moveTo(0, -10);
+        this.ctx.lineTo(0,10);
+
+        
+
 
         this.ctx.stroke();
         this.ctx.closePath();
         this.ctx.restore();
     }
+
+
 }
