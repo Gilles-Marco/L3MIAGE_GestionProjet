@@ -74,6 +74,7 @@ function init(){
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
+  startButton.style.visibility = "visible";
   if(DEBUG)
     startButton.style.visibility = "hidden";
   startButton.onclick = startGame;
