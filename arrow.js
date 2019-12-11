@@ -3,8 +3,8 @@ export class Arrow{
         this.x = x1;
         this.y = y1;
         this.ctx = ctx;
-        this.vitesseX = puissance;
-        this.viteseY = puissance;
+        this.vx = puissance;
+        this.vy = puissance;
     }
 
 
@@ -74,7 +74,7 @@ export class Arrow{
     }
 
     deplacerArrow(){
-        this.x += this.vitesseX;
-        //this.y -= this.viteseY;
+        this.x += this.vx;
+        //this.y -= this.vy;
     }
 }

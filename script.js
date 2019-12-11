@@ -59,8 +59,6 @@ const ennemyWidth = 30;
 const ennemyHeight = 50;
 
 function init(){
-  console.log("Page chargée");
-
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
   canvas.height = window.innerHeight;
@@ -121,8 +119,6 @@ function init(){
     }
   });
 
-  //Timer pour faire accélérer la caméra
-
   //Générateur de platform
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
@@ -149,16 +145,14 @@ function updateCanvas(timestamp){
   drawFps(delta);
 
   moveCamera(delta);
-  
-  //Nettoyage des plateformes inutiles dans platformArray TODO
-  //Nettoyage des ennemis inuiles dans ennemyArray TODO
-  //Nettoyage des flèches inutiles dans arrowArray TODO
 
   //Generation des plateformes
   platformGenerator.generate();
   //Generation des ennemys
   if(platformGenerator.cursor>=canvas.width*0.80)
     ennemyGenerator.generate();
+  //Nettoyage des plateformes
+  platformOut();
   //Draw Platform
   platformArray.forEach((item, index)=>{
     item.draw();
@@ -195,6 +189,9 @@ function updateCanvas(timestamp){
     }
   });
 
+  //Nettoyage des fleches
+  arrowStopped()
+  //Affichage des flèches
   arrowArray.forEach((item)=>{
     item.drawArrow();
     item.deplacerArrow();
@@ -340,15 +337,20 @@ function platformOut(){
 
   platformArray.forEach((item, index)=>{
     if(item.x+item.width<0)
-      platformArray.splice(index, index);
+      platformArray.splice(index, 1);
   });
 }
 
-function arrowStopeed(){
+function arrowStopped(){
   /**
    * Check if an arrow has no VX and delete it from the game
    */
-  console.log("ArrowStopped not implemented");
+  arrowArray.forEach((item, index)=>{
+    if(item.vx==0 && item.vy==0){
+      arrowArray.splice(index, 1);
+    }
+  });
+  
 }
 
 function moveCamera(delta){
