@@ -16,7 +16,7 @@ body, html {
   z-index:0;
 }
 
-#startButton{
+#startButton, #newgame{
   position:fixed;
   top:50%;
   left:50%;
@@ -25,6 +25,26 @@ body, html {
   padding: 5px 40px;
   font-size:24px;
   cursor: pointer;
+  border: solid 1px #a5a5a5;
+  background: white;
+  border-radius: 5px;
+  height: 4em;
+  width: 15em;
+  transition-property: background border;
+  transition-duration: 0.5s;
+  outline: none;
+}
+
+#startButton:hover, #newgame:hover{
+  background:#add8e6;
+  box-shadow: 3px 5px 10px 0px rgba(39,137,194,0.66);
+  border: solid 1px #8acbe0;
+}
+
+#startButton:active, #newgame:active{
+  background: #81c9e0;
+  border: inset 1px #8acbe0;
+  box-shadow: none;
 }
 
 #saveScore{
@@ -34,15 +54,66 @@ body, html {
   transform: translate(-50%, -50%);
   z-index: 1;
   font-size: 24px;
+  border: solid 1px rgb(172, 171, 171);
+  background: white;
+  border-radius: 5px;
+  width: 30em;
+  height:10em;
+}
+
+#saveScore form{
+  position: relative;
+  left:50%;
+  transform: translate(-25%, 0);
+  margin-top: 1em;
+  height:100%;
+  width:100%;
+}
+
+#saveScore input[type="text"]{
+  margin-top: 0.25em;
+  border: solid 1px lightgrey;
+  border-radius: 3px;
+  padding: 0.25em 0.25em;
+  outline: none;
+  transition-property: background;
+  transition-duration: 0.5s;
+}
+
+#saveScore input[type="text"]:hover{
+  background: rgb(223, 223, 223);
+}
+
+#saveScore input[type="text"]:focus{
+  box-shadow: 1px 2px 5px 1px lightgrey;
+  background: rgb(238, 238, 238);
 }
 
 #saveScore input[type="submit"]{
   position:relative;
-  left:50%;
-  transform:translate(-50%, 0);
+  left:25%;
+  transform: translate(-50%, 0);
   font-size:24px;
   padding: 5px 40px;
   margin-top:25px;
+  border: solid 1px rgb(175, 175, 175);
+  background: lightgrey;
+  border-radius: 5px;
+  transition-property: border background;
+  transition-duration: 0.25s;
+  outline: none;
+ }
+
+#saveScore input[type="submit"]:hover{
+  box-shadow: 1px 2px 5px rgba(194, 194, 194, 0.7);
+  background: rgb(194, 192, 192);
+  border: solid 1px rgb(192, 190, 190);
+}
+
+#saveScore input[type="submit"]:hover{
+  box-shadow: none;
+  border: inset 1px rgb(192, 190, 190);
+  background: rgb(158, 158, 158);
 }
 
 #saveScore label{
@@ -61,6 +132,10 @@ body, html {
   left:50%;
   transform: translate(-50%, -50%);
   z-index:1;
+  background: white;
+  width:50em;
+  height:20em;
+  border-radius: 5px;
 }
 
 #scoreScreen button{

@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = true;
+const DEBUG = false;
 
 //Game physics
 const gravite = 9.8;
@@ -74,6 +74,7 @@ function init(){
 
   //Bind button to action
   startButton = document.querySelector("#startButton");
+  startButton.style.visibility = "visible";
   if(DEBUG)
     startButton.style.visibility = "hidden";
   startButton.onclick = startGame;
