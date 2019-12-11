@@ -29,7 +29,8 @@ var scoreScreenButton;
 var score = 0;
 var delta = 1;
 var t1 = null;
-var cameraSpeed = 50;
+const BASECAMERASPEED = 50;
+var cameraSpeed = BASECAMERASPEED;
 var cameraIncrement = 0.10;
 
 //Init game world variable
@@ -215,7 +216,8 @@ function updateCanvas(timestamp){
   ctx.stroke();
   ctx.restore();
   //Ajout du score 'passif'
-  score += delta/1000;
+  if(delta<1000)
+    score += delta/1000;
   //draw du score
   drawScore(ctx, score);
 
@@ -423,6 +425,18 @@ function newGame(){
   //lead the player to the "Start" screen
   scoreScreenDiv.style.visibility = "hidden";
   startButton.style.visibility = "visible";
+
+  //Reset des variables
+  score = 0;
+  perso = new Personnage(300, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
+  platformArray = [];
+  arrowArray = [];
+  ennemyArray = [];
+  cameraSpeed = BASECAMERASPEED;
+  //Générateur de platform
+  platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
+  //Générateur d'ennemis
+  ennemyGenerator = new EnnemyGenerator(150, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, canvas, ctx);
 }
 
 function drawFps(delta){
