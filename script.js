@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = true;
+const DEBUG = false;
 
 //Game physics
 const gravite = 9.8;
@@ -68,7 +68,7 @@ function init(){
   sol = canvas.height-canvas.clientHeight/20;
 
   //Creation du personnage
-  perso = new Personnage(30, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
+  perso = new Personnage(300, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
   arc = new Arc(perso.x, perso.y+perso.height/2, ctx, perso.dx,perso.dy);
 
   //Bind button to action
@@ -123,8 +123,9 @@ function init(){
   platformGenerator = new PlatformGenerator(20, platformWidth, platformHeight, 200, 10, platformArray, sol, canvas, ctx);
   //Générateur d'ennemis
   ennemyGenerator = new EnnemyGenerator(150, ennemyWidth, ennemyHeight, ennemyArray, canvas.width/2, 10, canvas, ctx);
-  if(DEBUG)
+  if(DEBUG){
     updateCanvas();
+  }
 }
 
 function updateCanvas(timestamp){
@@ -354,14 +355,16 @@ function arrowStopped(){
 }
 
 function moveCamera(delta){
-  perso.x -= cameraSpeed*(delta/1000);
-  platformArray.forEach((item)=>{
-    item.x -= cameraSpeed*(delta/1000);
-  });
-  ennemyArray.forEach((item)=>{
-    item.x -= cameraSpeed*(delta/1000);
-  });
-  cameraSpeed += cameraIncrement;
+  if(delta<1000){
+    perso.x -= cameraSpeed*(delta/1000);
+    platformArray.forEach((item)=>{
+      item.x -= cameraSpeed*(delta/1000);
+    });
+    ennemyArray.forEach((item)=>{
+      item.x -= cameraSpeed*(delta/1000);
+    });
+    cameraSpeed += cameraIncrement;
+  }
 }
 
 function drawScore(ctx, score){
