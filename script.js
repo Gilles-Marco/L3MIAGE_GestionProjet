@@ -215,7 +215,8 @@ function updateCanvas(timestamp){
   ctx.lineTo(canvas.width, sol);
   ctx.stroke();
   ctx.restore();
-
+  //Ajout du score 'passif'
+  score += delta/1000;
   //draw du score
   drawScore(ctx, score);
 
@@ -342,9 +343,9 @@ function drawScore(ctx, score){
   let middleX = canvas.width/2;
   let y = canvas.height/20;
   let font_size = 24;
+  score = parseInt(score);
   let length_score = score+"";
-  console.log(length_score.length);
-  length_score = length_score*font_size;
+  length_score = length_score.length*font_size;
   ctx.save();
   ctx.font = `${font_size}px sans-serif`;
   ctx.fillStyle = "black";
