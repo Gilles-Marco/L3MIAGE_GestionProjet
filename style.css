@@ -25,6 +25,25 @@ body, html {
   padding: 5px 40px;
   font-size:24px;
   cursor: pointer;
+  border: solid 1px #a5a5a5;
+  background: white;
+  border-radius: 3px;
+  height: 4em;
+  width: 15em;
+  transition-property: background border;
+  transition-duration: 0.5s;
+}
+
+#startButton:hover{
+  background:#add8e6;
+  box-shadow: 3px 5px 10px 0px rgba(39,137,194,0.66);
+  border: solid 1px #8acbe0;
+}
+
+#startButton:active{
+  background: #81c9e0;
+  border: inset 1px #8acbe0;
+  box-shadow: none;
 }
 
 #saveScore{

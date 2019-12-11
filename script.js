@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = true;
+const DEBUG = false;
 
 //Game physics
 const gravite = 9.8;
