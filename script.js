@@ -46,6 +46,7 @@ const persoDXMAX = 400;
 var  arc;
 var deplacementDroite = false;
 var deplacementGauche = false;
+var persoTouche = false;
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
@@ -215,7 +216,17 @@ function updateCanvas(timestamp){
   ctx.stroke();
   ctx.restore();
 
-  requestAnimationFrame(updateCanvas);
+  //Regarde si les ennemi sont en dehors de l'écran
+  ennemyOut();
+
+  //Regarde si le joueur est out
+  playerOut();
+
+  //Regarde si le joueur est mort 
+  playerDead();
+
+  if(perso.vie != 0)
+    requestAnimationFrame(updateCanvas);
 }
 
 function playerDeplacement(){
@@ -298,10 +309,23 @@ function ennemyOut(){
    */
   ennemyArray.forEach((item, index)=>{
     if(item.x+item.width<0){
-      perso.hp -= 1;
-      ennemyArray.splice(index, index);
+      perso.vie -= 1;
+      ennemyArray.splice(index, 1);
     }
   });
+}
+
+function playerOut(){
+
+  if(perso.x+perso.width<0){
+      perso.vie =0;
+  }
+}
+
+function playerDead(){
+  if(perso.vie==0){
+    displaySaveScore();
+  }
 }
 
 function platformOut(){
