@@ -7,8 +7,6 @@ export class Arrow{
         this.vy = puissance;
     }
 
-
-
     drawArrow(){
         //variables to be used when creating the arrow
         var headlen = 10;
@@ -76,5 +74,18 @@ export class Arrow{
     deplacerArrow(){
         this.x += this.vx;
         //this.y -= this.vy;
+    }
+
+    hasHit(ennemyArray, platformArray){
+        //Arrow hitbox is a rectangle
+        //The rectangle can rotate due to VX and VY
+
+        //Right side
+        let rsX = {x1: this.x+this.width, y1: this.y+this.height, x2: this.x+this.width, y2: this.y};
+        //Upper side
+        //Left side
+        //Bottom side
+
+        //Test 4 line for collision
     }
 }
