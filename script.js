@@ -217,6 +217,7 @@ function updateCanvas(timestamp){
     let touched = item.hasHit(ennemyArray, platformArray);
     if(touched){
       console.log("Sa a touché");
+      console.log(touched.index);
       touched.array.splice(touched.index, 1);
       arrowArray.splice(index, 1);
     }
@@ -337,7 +338,7 @@ function ennemyOut(){
    */
   ennemyArray.forEach((item, index)=>{
     if(item.x+item.width<0){
-      perso.vie -= 1;
+      // perso.vie -= 1;
       ennemyArray.splice(index, 1);
     }
   });

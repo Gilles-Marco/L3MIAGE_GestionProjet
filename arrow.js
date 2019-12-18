@@ -97,12 +97,12 @@ export class Arrow{
 
         for(let i=0;i<ennemyArray.length;i++){
             if(this.testRectangle(arrowVectice, ennemyArray[i]))
-                return {"array":ennemyArray, "i":i};
+                return {array:ennemyArray, index:i};
         }
 
         for(let i=0;i<platformArray.length;i++){
             if(this.testRectangle(arrowVectice, platformArray[i]))
-                return {"array":platformArray, "index":i};
+                return {array:platformArray, index:i};
         }
 
         return false;
@@ -157,7 +157,7 @@ export class Arrow{
         }
 
         let intersection = {x:v1.x1+(t*dv1.x) , y:v1.y1+(t*dv1.y)};
-        console.log(`Intersection ${intersection}`);
+        // console.log(`Intersection ${intersection}`);
         
         return true;
     }
