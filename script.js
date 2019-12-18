@@ -208,15 +208,17 @@ function updateCanvas(timestamp){
   //Nettoyage des fleches
   arrowStopped()
   //Affichage des flèches
-  arrowArray.forEach((item)=>{
+  arrowArray.forEach((item, index)=>{
     item.drawArrow();
     item.deplacerArrow();
     //Test si la flèche touche le sol
 
     //Test si la flèche touche une plateforme ou un ennemi
-    if(item.hasHit(ennemyArray, platformArray)){
+    let touched = item.hasHit(ennemyArray, platformArray);
+    if(touched){
       console.log("Sa a touché");
-
+      touched.array.splice(touched.index, 1);
+      arrowArray.splice(index, 1);
     }
   });
 
