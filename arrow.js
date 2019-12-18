@@ -3,7 +3,7 @@ export class Arrow{
         this.x = x1;
         this.y = y1;
         this.ctx = ctx;
-        this.angleBis=Math.atan2(mouseY,mouseX);
+        this.angleBis=Math.atan2(mouseY-this.y,mouseX-this.x);
 
         switch(this.angleBis){
             case this.angleBis<=Math.PI/2 && this.angleBis>0:
@@ -46,14 +46,13 @@ export class Arrow{
         //Angle pour la tête de fleche
         var angle = Math.atan2(toy-this.y,tox-this.x);
 
-        //Angle pour la rotation de la flèche
-        this.angleBis =  Math.atan2(this.vy,this.vx);
-
 
         this.ctx.save();
         this.ctx.strokeStyle = "blue";
 
         this.ctx.translate(this.x,this.y);
+
+        
         this.ctx.rotate(this.angleBis);
 
      
@@ -111,6 +110,6 @@ export class Arrow{
 
     deplacerArrow(){
         this.x += this.vx;
-        this.y -= this.vy;
+        this.y += this.vy;
     }
 }
