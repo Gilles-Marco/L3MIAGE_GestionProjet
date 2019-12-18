@@ -17,8 +17,6 @@ export class Arc{
 
         var angle = Math.atan2(mouseX-this.x, mouseY-this.y);
 
-        console.log(angle);
-
 
         this.ctx.translate(this.x,this.y);
         this.ctx.rotate(-angle-(Math.PI/2));
