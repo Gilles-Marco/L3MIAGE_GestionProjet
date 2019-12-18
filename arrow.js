@@ -5,6 +5,9 @@ export class Arrow{
         this.ctx = ctx;
         this.vx = puissance;
         this.vy = puissance;
+
+        this.height = 10;
+        this.width = 40;
     }
 
     drawArrow(){
@@ -77,15 +80,77 @@ export class Arrow{
     }
 
     hasHit(ennemyArray, platformArray){
+        let hasHit = false;
         //Arrow hitbox is a rectangle
         //The rectangle can rotate due to VX and VY
 
-        //Right side
-        let rsX = {x1: this.x+this.width, y1: this.y+this.height, x2: this.x+this.width, y2: this.y};
-        //Upper side
-        //Left side
-        //Bottom side
+        //Get Arrow Vectice and try colliding each vectice with a (non rotated) rectangle. 
+        //ennemy and platform dont rotate
+        let arrowVectice = [];
+        //Top vectice
+        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2:this.x+this.width, y2:this.y-this.height/2});
+        //Bottom vectice
+        arrowVectice.push({x1:this.x, y1:this.y+this.height/2, x2:this.x+this.width, y2:this.y+this.height/2});
+        //Left vectice
+        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2: this.x, y2:this.y+this.height/2});
+        //Right vectice
+        arrowVectice.push({x1:this.x+this.width, y1:this.y-this.height/2, x2:this.x+this.width, y2:this.y+this.height/2});
 
-        //Test 4 line for collision
+        for(let i=0;i<ennemyArray.length;i++){
+            if(this.testRectangle(arrowVectice, ennemyArray[i]));
+                return true;
+        }
+
+        for(let i=0;i<platformArray.length;i++){
+            if(this.testRectangle(arrowVectice, platformArray[i]));
+                return true;
+        }
+
+        return hasHit;
+    }
+
+    testRectangle(vectice, rectangle){
+        let isIn = false;
+        
+        //Rectangle vectice
+        let rVectice = [];
+        //Top vectice
+        rVectice.push({x1:rectangle.x, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y});
+        //Bottom vectice
+        rVectice.push({x1:rectangle.x, y1:rectangle.y+rectangle.height, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
+        //Left vectice
+        rVectice.push({x1:rectangle.x, y1:rectangle.y, x2: rectangle.x, y2:rectangle.y+rectangle.height});
+        //Right vectice
+        rVectice.push({x1:rectangle.x+rectangle.width, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
+
+        for(let i=0;i<rVectice.length;i++){
+            for(let j=0;j<vectice.length;j++){
+                if(this.testVectice(rVectice[i], vectice[j]))
+                    return true;
+            }
+        }
+
+        return isIn;
+    }
+
+    testVectice(v1, v2){
+        //Direction vector
+        let dv1 = {x:v1.x2-v1.x1, y:v1.y2-v1.y1};
+        let dv2 = {x:v2.x2-v2.x1, y:v2.y2-v2.y1};
+        //test if vectice are parallele
+        let valuePara = dv1.x*dv2.y - dv2.x*dv1.y;
+        if(valuePara==0.0)
+            return false;
+
+        let vInter = {x: v1.x1-v2.x1, y: v1.y1-v2.y1};
+        let t = (vInter.x*dv2.y - vInter.y*dv2.y)/valuePara;
+        if(t<0 || t>1)
+            return false;
+
+        let u = (vInter.x*dv1.x - vInter.y*dv1.y)/valuePara;
+        if(u<0.0 || t>1.0)
+            return false;
+
+        return true;
     }
 }
