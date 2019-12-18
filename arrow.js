@@ -80,7 +80,6 @@ export class Arrow{
     }
 
     hasHit(ennemyArray, platformArray){
-        let hasHit = false;
         //Arrow hitbox is a rectangle
         //The rectangle can rotate due to VX and VY
 
@@ -97,21 +96,19 @@ export class Arrow{
         arrowVectice.push({x1:this.x+this.width, y1:this.y-this.height/2, x2:this.x+this.width, y2:this.y+this.height/2});
 
         for(let i=0;i<ennemyArray.length;i++){
-            if(this.testRectangle(arrowVectice, ennemyArray[i]));
-                return true;
+            if(this.testRectangle(arrowVectice, ennemyArray[i]))
+                return {"array":ennemyArray, "i":i};
         }
 
         for(let i=0;i<platformArray.length;i++){
-            if(this.testRectangle(arrowVectice, platformArray[i]));
-                return true;
+            if(this.testRectangle(arrowVectice, platformArray[i]))
+                return {"array":platformArray, "index":i};
         }
 
-        return hasHit;
+        return false;
     }
 
     testRectangle(vectice, rectangle){
-        let isIn = false;
-        
         //Rectangle vectice
         let rVectice = [];
         //Top vectice
@@ -125,12 +122,14 @@ export class Arrow{
 
         for(let i=0;i<rVectice.length;i++){
             for(let j=0;j<vectice.length;j++){
-                if(this.testVectice(rVectice[i], vectice[j]))
+                if(this.testVectice(rVectice[i], vectice[j])==true){
+                    // console.log(rVectice[i], vectice[j]);
                     return true;
+                }
             }
         }
 
-        return isIn;
+        return false;
     }
 
     testVectice(v1, v2){
@@ -140,20 +139,26 @@ export class Arrow{
         //test if vectice are parallele
         let valuePara = dv1.x*dv2.y - dv2.x*dv1.y;
         // console.log(`valuePara = ${valuePara}`);
-        if(valuePara==0.0)
+        if(valuePara==0.0){
             return false;
+        }
 
         let vInter = {x: v1.x1-v2.x1, y: v1.y1-v2.y1};
         let t = (vInter.x*dv2.y - vInter.y*dv2.x)/valuePara;
-        // console.log(`t = ${t}`);
-        if(t<0 || t>1)
+        // console.log(`t = ${t} ${(t<0 || t>1)}`);
+        if(t<0 || t>1){
             return false;
+        }
 
         let u = (vInter.x*dv1.y - vInter.y*dv1.x)/valuePara;
         // console.log(`u = ${u}`);
-        if(u<0 || u>1)
+        if(u<0 || u>1){
             return false;
+        }
 
+        let intersection = {x:v1.x1+(t*dv1.x) , y:v1.y1+(t*dv1.y)};
+        console.log(`Intersection ${intersection}`);
+        
         return true;
     }
 }
