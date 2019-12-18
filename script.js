@@ -102,7 +102,7 @@ function init(){
       perso.dy -= 500;
     }
     if(event.keyCode === 32){
-      arc.puissance +=0.1;
+      arc.puissance +=0.5;
     }
   });
 
@@ -118,7 +118,7 @@ function init(){
       
       arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
       this.console.log("Espace a été relaché, puissance : " + arc.puissance);
-      arc.puissance =4;
+      arc.puissance =15;
     }
   });
 
@@ -211,6 +211,7 @@ function updateCanvas(timestamp){
   arrowStopped()
   //Affichage des flèches
   arrowArray.forEach((item)=>{
+    item.vy += gravite * (delta/1000);
     item.drawArrow();
     item.deplacerArrow();
   });

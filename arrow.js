@@ -109,6 +109,7 @@ export class Arrow{
     }
 
     deplacerArrow(){
+         
         this.x += this.vx;
         this.y += this.vy;
     }

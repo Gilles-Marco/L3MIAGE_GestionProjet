@@ -3,7 +3,7 @@ export class Arc{
         this.x = x1;
         this.y = y1;
         this.ctx = ctx;
-        this.puissance =1;
+        this.puissance =15;
         this.delai = 2;
 
 
