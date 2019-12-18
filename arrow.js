@@ -139,16 +139,19 @@ export class Arrow{
         let dv2 = {x:v2.x2-v2.x1, y:v2.y2-v2.y1};
         //test if vectice are parallele
         let valuePara = dv1.x*dv2.y - dv2.x*dv1.y;
+        // console.log(`valuePara = ${valuePara}`);
         if(valuePara==0.0)
             return false;
 
         let vInter = {x: v1.x1-v2.x1, y: v1.y1-v2.y1};
-        let t = (vInter.x*dv2.y - vInter.y*dv2.y)/valuePara;
+        let t = (vInter.x*dv2.y - vInter.y*dv2.x)/valuePara;
+        // console.log(`t = ${t}`);
         if(t<0 || t>1)
             return false;
 
-        let u = (vInter.x*dv1.x - vInter.y*dv1.y)/valuePara;
-        if(u<0.0 || t>1.0)
+        let u = (vInter.x*dv1.y - vInter.y*dv1.x)/valuePara;
+        // console.log(`u = ${u}`);
+        if(u<0 || u>1)
             return false;
 
         return true;

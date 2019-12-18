@@ -211,6 +211,11 @@ function updateCanvas(timestamp){
   arrowArray.forEach((item)=>{
     item.drawArrow();
     item.deplacerArrow();
+    //Test si la flèche touche le sol
+
+    //Test si la flèche touche une plateforme ou un ennemi
+    if(item.hasHit(ennemyArray, platformArray))
+      console.log("Sa a touché");
   });
 
   playerDeplacement();
