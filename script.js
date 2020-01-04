@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = false;
+const DEBUG = true;
 
 //Game physics
 const gravite = 9.8;
@@ -210,14 +210,24 @@ function updateCanvas(timestamp){
   //Affichage des flèches
   arrowArray.forEach((item, index)=>{
     item.drawArrow();
+    if(DEBUG){
+      ctx.save();
+      ctx.strokeStyle = "red";
+      ctx.strokeRect(item.x, item.y-item.height/2, item.width, item.height);
+      ctx.restore();
+    }
     item.deplacerArrow();
     //Test si la flèche touche le sol
+    if(item.y+item.height/2 >= sol){
+      item.y = 0;
+      item.dy = 0;
+      arrowArray.splice(index, 1);
+    }
 
     //Test si la flèche touche une plateforme ou un ennemi
     let touched = item.hasHit(ennemyArray, platformArray);
     if(touched){
       console.log("Sa a touché");
-      console.log(touched.index);
       touched.array.splice(touched.index, 1);
       arrowArray.splice(index, 1);
     }
