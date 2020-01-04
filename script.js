@@ -47,7 +47,7 @@ const persoDXMAX = 400;
 var  arc;
 var deplacementDroite = false;
 var deplacementGauche = false;
-var mousePos;
+var mousePos = {x:0, y:0};
 
 //Constante sur la taille des plateformes
 const platformWidth = 120;
