@@ -25,13 +25,15 @@ export class PlatformGenerator{
         /**
          * Regarde pour générer une plateforme et la push dans la liste du jeu donner en parametre
          */
+
+         //incremente du curseur
         if(this.cursor<this.canvas.clientWidth-100){
             this.cursor += this.cursorjump
         }
 
         if(this.lastPlacedPlatform!=null){
             //Check les conditions pour créer une plateforme
-            if(this.cursor - this.lastPlacedPlatform.x < this.platformDensity)
+            if(this.cursor - this.lastPlacedPlatform.x < this.platformDensity && this.arrayPlatform.length>0)
                 return null;
         }
         
@@ -44,6 +46,8 @@ export class PlatformGenerator{
         let platform = new Platform(this.cursor, platY, this.platformWidth, this.platformHeight, this.ctx);
         let nbPlat = Math.ceil(this.platformWidth/this.platformDensity);
         let min = (this.arrayPlatform.length-nbPlat>0) ? this.arrayPlatform.length-nbPlat : 0;
+        //Créer une array avec les dernieres plateformes placées afin de faire un premier tri des plateformes 
+        //sur lesquels il est pertinent de faire un test de collision
         let buffArray = this.arrayPlatform.slice(min, this.arrayPlatform.length);
         while(this.intersectMultiple(platform, buffArray))
             platform = new Platform(this.cursor, Math.random()*this.canvas.clientHeight, this.platformWidth, this.platformHeight, this.ctx);
@@ -51,6 +55,7 @@ export class PlatformGenerator{
         //Ajout de la plateforme
         this.arrayPlatform.push(platform);
         this.lastPlacedPlatform = platform;
+        return platform;
     }
 
     intersect(p1, p2){

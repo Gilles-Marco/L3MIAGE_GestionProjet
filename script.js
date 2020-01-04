@@ -165,8 +165,9 @@ function updateCanvas(timestamp){
   //Generation des plateformes
   platformGenerator.generate();
   //Generation des ennemys
-  if(platformGenerator.cursor>=canvas.width*0.80)
+  if(platformGenerator.cursor>=canvas.width*0.80){
     ennemyGenerator.generate();
+  }
   //Nettoyage des plateformes
   platformOut();
   //Draw Platform
@@ -356,7 +357,7 @@ function ennemyOut(){
 
 function playerOut(){
 
-  if(perso.x+perso.width<0){
+  if(perso.x+perso.width<0 && DEBUG==false){
       perso.vie =0;
   }
 }

@@ -20,8 +20,8 @@ export class EnnemyGenerator {
 
         //Check si le générateur peut créer un nouvel Ennemy en fonction de la densité sur laquelle il a été créer
         if(this.lastPlacedEnnemy!=null){
-            if(this.cursor-this.ennemyDensity<this.lastPlacedEnnemy.x){
-                return  null;
+            if(this.cursor-this.ennemyDensity<this.lastPlacedEnnemy.x && this.ennemyArray.length>0){
+                return null;
             }
         }
 
