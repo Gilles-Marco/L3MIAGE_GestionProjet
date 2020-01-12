@@ -62,6 +62,12 @@ const ennemyHeight = 50;
 var jump = 1;
 
 
+var timerID;
+var counter = 0;
+var pressHoldDuration = 50;
+var pressHoldEvent = new CustomEvent("pressHold");
+
+
 function init(){
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
@@ -106,12 +112,63 @@ function init(){
         jump -= 1;
       }
     }
-    if(event.keyCode === 32){
-      arc.puissance +=0.5;
-    }
   });
 
- 
+  /*window.addEventListener('mousedown',function(event){
+      arc.puissance += 0.5;
+  })
+
+  window.addEventListener('mouseup',function(event){
+    arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
+    this.console.log("TIR , puissance : " + arc.puissance);
+    arc.puissance =15;
+   
+  })*/
+
+  window.addEventListener("mousedown", pressingDown, false);
+  window.addEventListener("mouseup", notPressingDown, false);
+
+  function pressingDown(e) {
+    // Start the timer
+    requestAnimationFrame(timer);
+
+    e.preventDefault();
+
+    console.log("Pressing!");
+  }
+
+  function notPressingDown(e) {
+    // Stop the timer
+    cancelAnimationFrame(timerID);
+    counter = 0;
+    arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
+    this.console.log("TIR , puissance : " + arc.puissance);
+    arc.puissance =15;
+    console.log("Not pressing!");
+  }
+
+  //
+  // Runs at 60fps when you are pressing down
+  //
+  function timer() {
+    console.log("Timer tick!");
+
+    if (counter < pressHoldDuration) {
+      timerID = requestAnimationFrame(timer);
+      arc.puissance += 0.5;
+      counter++;
+    } else {
+      console.log("Press threshold reached!");
+      window.dispatchEvent(pressHoldEvent);
+    }
+  }
+
+  function doSomething(e) {
+    console.log("pressHold event fired!");
+  }
+
+  // Listening for our custom pressHold event
+  window.addEventListener("pressHold", doSomething, false);
 
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
@@ -120,19 +177,10 @@ function init(){
     if(event.keyCode === 37){
       deplacementGauche = false;
     }
-
-    if(event.keyCode === 32 ){
-      
-      arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
-      this.console.log("Espace a été relaché, puissance : " + arc.puissance);
-      arc.puissance =15;
-    }
   });
 
   window.addEventListener('mousemove',function(event){
       mousePos = getMousePos(canvas,event);
-
- 
   },false);
 
   //Générateur de platform
