@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = false;
+const DEBUG = true;
 
 //Game physics
 const gravite = 9.8;
@@ -31,7 +31,7 @@ var delta = 1;
 var t1 = null;
 const BASECAMERASPEED = 50;
 var cameraSpeed = BASECAMERASPEED;
-var cameraIncrement = 0.10;
+var cameraIncrement = 0.5;
 
 //Init game world variable
 var platformArray = [];
@@ -63,6 +63,7 @@ var jump = 1;
 
 //Interval pour mousedown pour increment la puissance
 var intervalIncrement;
+var puissanceIncrement = 0.5;
 
 var BowSong = document.querySelector('#BowSong');
 var ennemySong = document.querySelector('#EnnemySong');
@@ -119,7 +120,7 @@ function init(){
 
   window.addEventListener("mousedown", ()=>{
     intervalIncrement = setInterval(()=>{
-      arc.puissance += 0.5;
+      arc.puissance += puissanceIncrement;
     }, 50);
   }, false);
   window.addEventListener("mouseup", ()=>{
@@ -251,6 +252,7 @@ function updateCanvas(timestamp){
     //Test si la flèche touche une plateforme ou un ennemi
     let touched = item.hasHit(ennemyArray, platformArray);
     if(touched){
+      score += 10;
       console.log("Sa a touché");
       ennemySong.play();
       touched.array.splice(touched.index, 1);
@@ -376,7 +378,10 @@ function ennemyOut(){
    */
   ennemyArray.forEach((item, index)=>{
     if(item.x+item.width<0){
-      // perso.vie -= 1;
+      if(DEBUG==false){
+        perso.vie -= 1;
+        PlayerSong.play();
+      }
       ennemyArray.splice(index, 1);
     }
   });
@@ -429,6 +434,7 @@ function moveCamera(delta){
       item.x -= cameraSpeed*(delta/1000);
     });
     cameraSpeed += cameraIncrement;
+    puissanceIncrement += cameraIncrement/100;
   }
 }
 
