@@ -3,7 +3,7 @@ export class Arc{
         this.x = x1;
         this.y = y1;
         this.ctx = ctx;
-        this.puissance =1;
+        this.puissance =15;
         this.delai = 2;
 
 
@@ -16,8 +16,6 @@ export class Arc{
 
 
         var angle = Math.atan2(mouseX-this.x, mouseY-this.y);
-
-        console.log(angle);
 
 
         this.ctx.translate(this.x,this.y);
