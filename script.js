@@ -70,6 +70,9 @@ var ennemySong = document.querySelector('#EnnemySong');
 var PlayerSong = document.querySelector('#PlayerSong');
 var OverSong = document.querySelector('#GameOver');
 
+var imageBackground = new Image();
+imageBackground.src = "image/vannes-et-ses-remparts.jpg";
+
 
 function init(){
   //Resize canvas to fullscreen
@@ -165,8 +168,7 @@ function updateCanvas(timestamp){
   //Main function loop
   //Redraw the background
   ctx.save();
-  ctx.fillStyle="lightgrey";
-  ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+  ctx.drawImage(imageBackground, 0, 0);
   ctx.restore();
   
   //Get time delta
