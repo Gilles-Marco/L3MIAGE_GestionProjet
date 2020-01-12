@@ -31,7 +31,7 @@ var delta = 1;
 var t1 = null;
 const BASECAMERASPEED = 50;
 var cameraSpeed = BASECAMERASPEED;
-var cameraIncrement = 0.5;
+var cameraIncrement = 0.25;
 
 //Init game world variable
 var platformArray = [];
@@ -252,7 +252,10 @@ function updateCanvas(timestamp){
     //Test si la flèche touche une plateforme ou un ennemi
     let touched = item.hasHit(ennemyArray, platformArray);
     if(touched){
-      score += 10;
+      if(touched.type=="ennemy")
+        score += 10;
+      else
+        score += 5;
       console.log("Sa a touché");
       ennemySong.play();
       touched.array.splice(touched.index, 1);

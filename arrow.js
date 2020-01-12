@@ -134,12 +134,12 @@ export class Arrow{
 
         for(let i=0;i<ennemyArray.length;i++){
             if(this.testRectangle(arrowVectice, ennemyArray[i], 1))
-                return {array:ennemyArray, index:i};
+                return {array:ennemyArray, index:i, type:"ennemy"};
         }
 
         for(let i=0;i<platformArray.length;i++){
             if(this.testRectangle(arrowVectice, platformArray[i], 0))
-                return {array:platformArray, index:i};
+                return {array:platformArray, index:i, type:"plateforme"};
         }
 
         return false;
