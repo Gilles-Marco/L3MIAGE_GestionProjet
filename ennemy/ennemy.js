@@ -1,6 +1,8 @@
 export class Ennemy{
 
     constructor(x, y, width, height, ctx){
+        //X au milieu du corps
+        //Y un peu au dessus du centre de la tête
         this.width = width;
         this.height = height;
         this.isHit = false;

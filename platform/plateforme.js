@@ -1,6 +1,7 @@
 export class Platform{
 
     constructor(x, y, width, height, ctx){
+        //X Y bord en haut à gauche
         this.x = x;
         this.y = y;
         this.width = width;

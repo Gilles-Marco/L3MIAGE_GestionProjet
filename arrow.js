@@ -121,39 +121,53 @@ export class Arrow{
         //Get Arrow Vectice and try colliding each vectice with a (non rotated) rectangle. 
         //ennemy and platform dont rotate
         let arrowVectice = [];
+        //Angle for the left vectice and right vectice
+        let otherAngle = this.angleBis-(Math.PI/4);
         //Top vectice
-        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2:this.x+this.width, y2:this.y-this.height/2});
+        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2:this.x+this.width*Math.cos(this.angleBis), y2:this.y-this.height/2*Math.sin(this.angleBis)});
         //Bottom vectice
-        arrowVectice.push({x1:this.x, y1:this.y+this.height/2, x2:this.x+this.width, y2:this.y+this.height/2});
+        arrowVectice.push({x1:this.x+this.height*Math.cos(otherAngle), y1:this.y+this.height/2*Math.sin(otherAngle), x2:this.x+this.height*Math.cos(otherAngle)+this.width*Math.cos(this.angleBis), y2:this.y+this.height*Math.sin(otherAngle)+this.height/2*Math.sin(this.angleBis)});
         //Left vectice
-        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2: this.x, y2:this.y+this.height/2});
+        arrowVectice.push({x1:this.x, y1:this.y-this.height/2, x2: this.x+this.height*Math.cos(otherAngle), y2:this.y+this.height*otherAngle+this.height/2*Math.sin(this.angleBis)});
         //Right vectice
-        arrowVectice.push({x1:this.x+this.width, y1:this.y-this.height/2, x2:this.x+this.width, y2:this.y+this.height/2});
+        arrowVectice.push({x1:this.x+this.height*Math.cos(otherAngle)+this.width*Math.cos(this.angleBis), y1:this.y+this.height*Math.sin(otherAngle)-this.height/2*Math.sin(this.angleBis), x2:this.x+this.height*Math.cos(otherAngle)+this.width*Math.cos(this.angleBis), y2:this.y+this.height*Math.sin(otherAngle)+this.height/2*Math.sin(this.angleBis)});
 
         for(let i=0;i<ennemyArray.length;i++){
-            if(this.testRectangle(arrowVectice, ennemyArray[i]))
+            if(this.testRectangle(arrowVectice, ennemyArray[i], 1))
                 return {array:ennemyArray, index:i};
         }
 
         for(let i=0;i<platformArray.length;i++){
-            if(this.testRectangle(arrowVectice, platformArray[i]))
+            if(this.testRectangle(arrowVectice, platformArray[i], 0))
                 return {array:platformArray, index:i};
         }
 
         return false;
     }
 
-    testRectangle(vectice, rectangle){
+    testRectangle(vectice, rectangle, offset){
         //Rectangle vectice
         let rVectice = [];
-        //Top vectice
-        rVectice.push({x1:rectangle.x, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y});
-        //Bottom vectice
-        rVectice.push({x1:rectangle.x, y1:rectangle.y+rectangle.height, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
-        //Left vectice
-        rVectice.push({x1:rectangle.x, y1:rectangle.y, x2: rectangle.x, y2:rectangle.y+rectangle.height});
-        //Right vectice
-        rVectice.push({x1:rectangle.x+rectangle.width, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
+        if(offset==false){
+            //Top vectice
+            rVectice.push({x1:rectangle.x, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y});
+            //Bottom vectice
+            rVectice.push({x1:rectangle.x, y1:rectangle.y+rectangle.height, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
+            //Left vectice
+            rVectice.push({x1:rectangle.x, y1:rectangle.y, x2: rectangle.x, y2:rectangle.y+rectangle.height});
+            //Right vectice
+            rVectice.push({x1:rectangle.x+rectangle.width, y1:rectangle.y, x2:rectangle.x+rectangle.width, y2:rectangle.y+rectangle.height});
+        }
+        else{
+            //Top vectice
+            rVectice.push({x1:rectangle.x-rectangle.width/2, y1:rectangle.y, x2:rectangle.x+rectangle.width/2, y2:rectangle.y});
+            //Bottom vectice
+            rVectice.push({x1:rectangle.x-rectangle.width/2, y1:rectangle.y+rectangle.height, x2:rectangle.x+rectangle.width/2, y2:rectangle.y+rectangle.height});
+            //Left vectice
+            rVectice.push({x1:rectangle.x-rectangle.width/2, y1:rectangle.y, x2: rectangle.x-rectangle.width/2, y2:rectangle.y+rectangle.height});
+            //Right vectice
+            rVectice.push({x1:rectangle.x+rectangle.width/2, y1:rectangle.y, x2:rectangle.x+rectangle.width/2, y2:rectangle.y+rectangle.height});
+        }
 
         for(let i=0;i<rVectice.length;i++){
             for(let j=0;j<vectice.length;j++){

@@ -221,13 +221,15 @@ function updateCanvas(timestamp){
   //Nettoyage des fleches
   arrowStopped()
   //Affichage des flèches
-  arrowArray.forEach((item)=>{
+  arrowArray.forEach((item, index)=>{
     item.vy += gravite * (delta/1000);
     item.drawArrow();
     if(DEBUG){
       ctx.save();
+      ctx.translate(item.x, item.y);
+      ctx.rotate(item.angleBis);
       ctx.strokeStyle = "red";
-      ctx.strokeRect(item.x, item.y-item.height/2, item.width, item.height);
+      ctx.strokeRect(0, -item.height/2, item.width, item.height);
       ctx.restore();
     }
     item.deplacerArrow();
