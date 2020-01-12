@@ -59,6 +59,9 @@ var ennemyGenerator;
 const ennemyWidth = 30;
 const ennemyHeight = 50;
 
+var jump = 1;
+
+
 function init(){
   //Resize canvas to fullscreen
   canvas = document.querySelector("#myCanvas");
@@ -97,13 +100,18 @@ function init(){
     if(event.keyCode === 37 ){
       deplacementGauche = true;
     }
-    if(event.keyCode === 38 && perso.dy>=0){
-      perso.dy -= 500;
+    if(event.keyCode === 38){
+      if(jump > 0){
+        perso.dy -= 500;
+        jump -= 1;
+      }
     }
     if(event.keyCode === 32){
-      arc.puissance +=0.1;
+      arc.puissance +=0.5;
     }
   });
+
+ 
 
   window.addEventListener('keyup',function(event){
     if(event.keyCode === 39){
@@ -114,9 +122,10 @@ function init(){
     }
 
     if(event.keyCode === 32 ){
-      arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance));
+      
+      arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
       this.console.log("Espace a été relaché, puissance : " + arc.puissance);
-      arc.puissance =4;
+      arc.puissance =15;
     }
   });
 
@@ -161,6 +170,9 @@ function updateCanvas(timestamp){
   drawFps(delta);
 
   moveCamera(delta);
+
+  if(perso.y > 574 )
+    jump = 1;
 
   //Generation des plateformes
   platformGenerator.generate();
@@ -209,7 +221,8 @@ function updateCanvas(timestamp){
   //Nettoyage des fleches
   arrowStopped()
   //Affichage des flèches
-  arrowArray.forEach((item, index)=>{
+  arrowArray.forEach((item)=>{
+    item.vy += gravite * (delta/1000);
     item.drawArrow();
     if(DEBUG){
       ctx.save();
@@ -255,6 +268,8 @@ function updateCanvas(timestamp){
     score += delta/1000;
   //draw du score
   drawScore(ctx, score);
+
+ 
 
   //Regarde si les ennemi sont en dehors de l'écran
   ennemyOut();
@@ -312,6 +327,7 @@ function playerPlatform(platformArray){
       if(persoFeet>platformArray[i].y && persoFeet<platformArray[i].y+platformArray[i].height){
         perso.dy = 0;
         perso.y = platformArray[i].y-perso.height;
+        jump=1;
         return platformArray[i];
       }
     }
