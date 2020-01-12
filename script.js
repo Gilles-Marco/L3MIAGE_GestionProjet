@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = true;
+const DEBUG = false;
 
 //Game physics
 const gravite = 9.8;
@@ -67,6 +67,11 @@ var counter = 0;
 var pressHoldDuration = 50;
 var pressHoldEvent = new CustomEvent("pressHold");
 
+var BowSong = document.querySelector('#BowSong');
+var ennemySong = document.querySelector('#EnnemySong');
+var PlayerSong = document.querySelector('#PlayerSong');
+var OverSong = document.querySelector('#GameOver');
+
 
 function init(){
   //Resize canvas to fullscreen
@@ -114,16 +119,6 @@ function init(){
     }
   });
 
-  /*window.addEventListener('mousedown',function(event){
-      arc.puissance += 0.5;
-  })
-
-  window.addEventListener('mouseup',function(event){
-    arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
-    this.console.log("TIR , puissance : " + arc.puissance);
-    arc.puissance =15;
-   
-  })*/
 
   window.addEventListener("mousedown", pressingDown, false);
   window.addEventListener("mouseup", notPressingDown, false);
@@ -131,8 +126,6 @@ function init(){
   function pressingDown(e) {
     // Start the timer
     requestAnimationFrame(timer);
-
-    e.preventDefault();
 
     console.log("Pressing!");
   }
@@ -144,12 +137,12 @@ function init(){
     arrowArray.push(new Arrow(arc.x,arc.y,ctx,arc.puissance,mousePos.x,mousePos.y));
     this.console.log("TIR , puissance : " + arc.puissance);
     arc.puissance =15;
+
+    BowSong.play();
     console.log("Not pressing!");
   }
 
-  //
-  // Runs at 60fps when you are pressing down
-  //
+
   function timer() {
     console.log("Timer tick!");
 
@@ -292,6 +285,7 @@ function updateCanvas(timestamp){
     let touched = item.hasHit(ennemyArray, platformArray);
     if(touched){
       console.log("Sa a touché");
+      ennemySong.play();
       touched.array.splice(touched.index, 1);
       arrowArray.splice(index, 1);
     }
@@ -430,6 +424,7 @@ function playerOut(){
 
 function playerDead(){
   if(perso.vie==0){
+    PlayerSong.play();
     displaySaveScore();
   }
 }
