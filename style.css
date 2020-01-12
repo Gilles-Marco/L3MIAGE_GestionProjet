@@ -16,6 +16,9 @@ body, html {
   z-index:0;
 }
 
+audio{
+  overflow: hidden;
+}
 #startButton, #newgame{
   position:fixed;
   top:50%;
