@@ -10,7 +10,7 @@ import {Arrow} from "./arrow.js";
 window.onload = init;
 
 //DEBUG Variable
-const DEBUG = true;
+const DEBUG = false;
 
 //Game physics
 const gravite = 9.8;
@@ -501,6 +501,7 @@ function newGame(){
   startButton.style.visibility = "visible";
 
   //Reset des variables
+  puissanceIncrement = 0.5;
   score = 0;
   perso = new Personnage(300, sol-persoHeight, persoWidth, persoHeight, persoDXMAX, "blue", ctx);
   platformArray = [];
